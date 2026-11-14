@@ -1,0 +1,244 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-paper: #f5ecd9;
+  --color-card: #fffaf0;
+  --color-ink: #231a14;
+  --color-muted: #6f6253;
+  --color-rule: #dccfb4;
+  --color-brick: #c8102e; /* Chicago flag red */
+  --color-brick-dark: #9c0c23;
+  --color-lake: #41b6e6; /* Chicago flag blue */
+  --color-lake-dark: #1b6f94;
+  --color-mustard: #f0b323;
+  --color-relish: #2f7d4f;
+
+  --font-display: 'Alfa Slab One', Rockwell, 'Roboto Slab', serif;
+  --font-sans: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Courier Prime', 'Courier New', ui-monospace, monospace;
+}
+
+html {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  /* faint diner-check stripes */
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent 0 27px,
+    rgb(35 26 20 / 0.035) 27px 28px
+  );
+}
+
+button {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-lake-dark);
+  outline-offset: 2px;
+}
+
+/* --- hard "sticker" shadow used on primary controls --- */
+.sticker {
+  border: 2px solid var(--color-ink);
+  box-shadow: 3px 3px 0 var(--color-ink);
+  transition:
+    transform 0.08s ease,
+    box-shadow 0.08s ease;
+}
+.sticker:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--color-ink);
+}
+
+/* --- slot machine year readout --- */
+.slot-digit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.05em;
+  height: 1.35em;
+  border-radius: 0.14em;
+  background: linear-gradient(#fffdf6 0%, #f2e6c8 48%, #d9c9a0 50%, #f6ecd2 100%);
+  color: var(--color-ink);
+  border: 2px solid var(--color-ink);
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.slot-rolling .slot-digit {
+  animation: slot-blur 0.12s linear infinite;
+}
+@keyframes slot-blur {
+  0% {
+    transform: translateY(-7%);
+    filter: blur(0.6px);
+  }
+  50% {
+    transform: translateY(7%);
+    filter: blur(1.4px);
+  }
+  100% {
+    transform: translateY(-7%);
+    filter: blur(0.6px);
+  }
+}
+.slot-landed {
+  animation: slot-land 0.35s cubic-bezier(0.2, 1.6, 0.4, 1);
+}
+@keyframes slot-land {
+  from {
+    transform: scale(1.12);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* --- overlays --- */
+.fade-in {
+  animation: fade-in 0.18s ease-out;
+}
+.slide-up {
+  animation: slide-up 0.24s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+.slide-left {
+  animation: slide-left 0.24s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes slide-up {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+}
+@keyframes slide-left {
+  from {
+    transform: translateX(40px);
+    opacity: 0;
+  }
+}
+
+/* --- scan highlight box --- */
+.scan-highlight {
+  position: absolute;
+  border: 3px solid var(--color-brick);
+  border-radius: 4px;
+  background: rgb(240 179 35 / 0.18);
+  box-shadow: 0 0 0 9999px rgb(35 26 20 / 0.45);
+  animation: highlight-pulse 1.6s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes highlight-pulse {
+  50% {
+    border-color: var(--color-mustard);
+  }
+}
+
+/* --- vintage receipt --- */
+.receipt {
+  --edge: var(--color-ink);
+  position: relative;
+  background: #fffdf4;
+  background-image: repeating-linear-gradient(0deg, transparent 0 23px, rgb(65 182 230 / 0.12) 23px 24px);
+  font-family: var(--font-mono);
+  color: #2a2420;
+  padding: 26px 20px;
+  filter: drop-shadow(0 6px 10px rgb(0 0 0 / 0.35));
+}
+/* perforated top and bottom: punched half-circles in the drawer colour */
+.receipt::before,
+.receipt::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 12px;
+  background: radial-gradient(circle, var(--edge) 5px, transparent 5.6px) 0 0 / 16px 12px repeat-x;
+}
+.receipt::before {
+  top: -6px;
+}
+.receipt::after {
+  bottom: -6px;
+}
+.receipt-tear {
+  border-top: 2px dashed #b9ab8c;
+  margin: 12px -20px;
+}
+.stamp {
+  display: inline-block;
+  border: 3px double var(--color-brick);
+  color: var(--color-brick);
+  padding: 4px 10px;
+  transform: rotate(-6deg);
+  font-family: var(--font-display);
+  letter-spacing: 0.06em;
+  opacity: 0.85;
+}
+
+/* --- leaflet pins --- */
+.tm-pin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50% 50% 50% 6px;
+  transform: rotate(-45deg);
+  background: var(--color-card);
+  border: 2px solid var(--color-ink);
+  box-shadow: 2px 2px 0 var(--color-ink);
+  font-size: 18px;
+}
+.tm-pin > span {
+  transform: rotate(45deg);
+}
+.tm-pin.is-open {
+  background: var(--color-mustard);
+}
+.tm-pin.is-active {
+  background: var(--color-brick);
+}
+.tm-you {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-lake);
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 2px var(--color-lake-dark), 0 0 0 10px rgb(65 182 230 / 0.25);
+}
+.leaflet-container {
+  font-family: var(--font-sans);
+  background: #e8dfc8;
+}
+/* sepia-tint the modern tiles so the map feels of a piece with the paper UI */
+.leaflet-tile-pane {
+  filter: sepia(0.35) saturate(0.85);
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
