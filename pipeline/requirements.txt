@@ -1,0 +1,12 @@
+# Core
+Pillow>=10.0
+
+# Fallback OCR engine. Also needs the Tesseract binary:
+#   macOS:  brew install tesseract
+#   Ubuntu: sudo apt-get install tesseract-ocr
+pytesseract>=0.3.10
+
+# Preferred OCR engine. Large download (models fetched on first run).
+# Comment these two lines out to run on Tesseract only.
+paddlepaddle>=2.6
+paddleocr>=2.7
