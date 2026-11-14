@@ -1,0 +1,1285 @@
+{
+  "version": 1,
+  "restaurants": [
+    {
+      "id": "palmer-house-1908",
+      "name": "Palmer House",
+      "year": 1908,
+      "opened": 1871,
+      "closed": null,
+      "address": "17 E Monroe St",
+      "lat": 41.8805,
+      "lng": -87.627,
+      "cuisine": "Grand Hotel Dining",
+      "emoji": "🏛️",
+      "blurb": "Potter Palmer's showpiece hotel, where the dining room ran on silver service and Lake Superior whitefish.",
+      "stillStanding": {
+        "status": "open",
+        "label": "Still standing",
+        "today": "Palmer House, a Hilton Hotel. The 1908 building was replaced on the same site in the 1920s, and the hotel never closed."
+      },
+      "scan": {
+        "src": "scans/palmer-house-1908.png",
+        "width": 1200,
+        "height": 2000,
+        "placeholder": true,
+        "credit": "Generated placeholder. Dishes and prices are period-plausible reconstructions, not a transcription."
+      },
+      "menu": [
+        {
+          "id": "palmer-house-1908-blue-points-on-the-half-shell",
+          "name": "Blue Points on the Half Shell",
+          "description": "Half dozen, on cracked ice",
+          "category": "Oysters and Relishes",
+          "price": 0.3,
+          "bbox": [
+            114,
+            426,
+            972,
+            92
+          ]
+        },
+        {
+          "id": "palmer-house-1908-celery-hearts",
+          "name": "Celery Hearts",
+          "description": "",
+          "category": "Oysters and Relishes",
+          "price": 0.25,
+          "bbox": [
+            114,
+            518,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "palmer-house-1908-queen-olives",
+          "name": "Queen Olives",
+          "description": "",
+          "category": "Oysters and Relishes",
+          "price": 0.2,
+          "bbox": [
+            114,
+            576,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "palmer-house-1908-green-turtle-soup",
+          "name": "Green Turtle Soup",
+          "description": "With sherry",
+          "category": "Soups",
+          "price": 0.4,
+          "bbox": [
+            114,
+            730,
+            972,
+            92
+          ]
+        },
+        {
+          "id": "palmer-house-1908-consomme-in-cup",
+          "name": "Consomme in Cup",
+          "description": "",
+          "category": "Soups",
+          "price": 0.2,
+          "bbox": [
+            114,
+            822,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "palmer-house-1908-chicken-gumbo",
+          "name": "Chicken Gumbo",
+          "description": "",
+          "category": "Soups",
+          "price": 0.25,
+          "bbox": [
+            114,
+            880,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "palmer-house-1908-broiled-lake-superior-whitefish",
+          "name": "Broiled Lake Superior Whitefish",
+          "description": "Maitre d'hotel butter",
+          "category": "Fish",
+          "price": 0.6,
+          "bbox": [
+            114,
+            1034,
+            972,
+            92
+          ]
+        },
+        {
+          "id": "palmer-house-1908-planked-shad",
+          "name": "Planked Shad",
+          "description": "",
+          "category": "Fish",
+          "price": 0.75,
+          "bbox": [
+            114,
+            1126,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "palmer-house-1908-prime-ribs-of-beef-au-jus",
+          "name": "Prime Ribs of Beef au Jus",
+          "description": "",
+          "category": "Roasts and Entrees",
+          "price": 0.7,
+          "bbox": [
+            114,
+            1280,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "palmer-house-1908-sirloin-steak",
+          "name": "Sirloin Steak",
+          "description": "Broiled to order",
+          "category": "Roasts and Entrees",
+          "price": 1.25,
+          "bbox": [
+            114,
+            1338,
+            972,
+            92
+          ]
+        },
+        {
+          "id": "palmer-house-1908-spring-lamb-with-mint-sauce",
+          "name": "Spring Lamb with Mint Sauce",
+          "description": "",
+          "category": "Roasts and Entrees",
+          "price": 0.75,
+          "bbox": [
+            114,
+            1430,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "palmer-house-1908-chicken-a-la-maryland",
+          "name": "Chicken a la Maryland",
+          "description": "Corn fritters and bacon",
+          "category": "Roasts and Entrees",
+          "price": 1.0,
+          "bbox": [
+            114,
+            1488,
+            972,
+            92
+          ]
+        },
+        {
+          "id": "palmer-house-1908-vanilla-ice-cream",
+          "name": "Vanilla Ice Cream",
+          "description": "",
+          "category": "Desserts",
+          "price": 0.2,
+          "bbox": [
+            114,
+            1676,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "palmer-house-1908-apple-pie",
+          "name": "Apple Pie",
+          "description": "",
+          "category": "Desserts",
+          "price": 0.1,
+          "bbox": [
+            114,
+            1734,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "palmer-house-1908-coffee-per-pot",
+          "name": "Coffee, per pot",
+          "description": "",
+          "category": "Desserts",
+          "price": 0.15,
+          "bbox": [
+            114,
+            1792,
+            972,
+            58
+          ]
+        }
+      ]
+    },
+    {
+      "id": "henricis-1927",
+      "name": "Henrici's",
+      "year": 1927,
+      "opened": 1868,
+      "closed": 1962,
+      "address": "67 W Randolph St",
+      "lat": 41.8843,
+      "lng": -87.6302,
+      "cuisine": "Viennese Bakery & Restaurant",
+      "emoji": "🥐",
+      "blurb": "The Randolph Street institution of the theater district, famous for coffee with whipped cream and a strict no-orchestra policy.",
+      "stillStanding": {
+        "status": "gone",
+        "label": "Demolished 1962",
+        "today": "Richard J. Daley Center and its plaza, home of the Chicago Picasso."
+      },
+      "scan": {
+        "src": "scans/henricis-1927.png",
+        "width": 1200,
+        "height": 1846,
+        "placeholder": true,
+        "credit": "Generated placeholder. Dishes and prices are period-plausible reconstructions, not a transcription."
+      },
+      "menu": [
+        {
+          "id": "henricis-1927-chicken-okra-soup",
+          "name": "Chicken Okra Soup",
+          "description": "",
+          "category": "Soups",
+          "price": 0.25,
+          "bbox": [
+            114,
+            426,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "henricis-1927-cream-of-tomato",
+          "name": "Cream of Tomato",
+          "description": "",
+          "category": "Soups",
+          "price": 0.2,
+          "bbox": [
+            114,
+            484,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "henricis-1927-wiener-schnitzel",
+          "name": "Wiener Schnitzel",
+          "description": "With lemon and anchovy",
+          "category": "Entrees",
+          "price": 0.85,
+          "bbox": [
+            114,
+            638,
+            972,
+            92
+          ]
+        },
+        {
+          "id": "henricis-1927-hungarian-goulash-with-spaetzle",
+          "name": "Hungarian Goulash with Spaetzle",
+          "description": "",
+          "category": "Entrees",
+          "price": 0.7,
+          "bbox": [
+            114,
+            730,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "henricis-1927-corned-beef-and-cabbage",
+          "name": "Corned Beef and Cabbage",
+          "description": "Boiled potato",
+          "category": "Entrees",
+          "price": 0.65,
+          "bbox": [
+            114,
+            788,
+            972,
+            92
+          ]
+        },
+        {
+          "id": "henricis-1927-broiled-whitefish",
+          "name": "Broiled Whitefish",
+          "description": "",
+          "category": "Entrees",
+          "price": 0.8,
+          "bbox": [
+            114,
+            880,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "henricis-1927-chicken-pot-pie",
+          "name": "Chicken Pot Pie",
+          "description": "Baked to order",
+          "category": "Entrees",
+          "price": 0.75,
+          "bbox": [
+            114,
+            938,
+            972,
+            92
+          ]
+        },
+        {
+          "id": "henricis-1927-sirloin-steak-sandwich",
+          "name": "Sirloin Steak Sandwich",
+          "description": "",
+          "category": "Entrees",
+          "price": 0.9,
+          "bbox": [
+            114,
+            1030,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "henricis-1927-ham-and-swiss-on-rye",
+          "name": "Ham and Swiss on Rye",
+          "description": "",
+          "category": "Sandwiches",
+          "price": 0.35,
+          "bbox": [
+            114,
+            1184,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "henricis-1927-club-sandwich",
+          "name": "Club Sandwich",
+          "description": "",
+          "category": "Sandwiches",
+          "price": 0.55,
+          "bbox": [
+            114,
+            1242,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "henricis-1927-henrici-coffee-cake",
+          "name": "Henrici Coffee Cake",
+          "description": "From our own bakery",
+          "category": "Pastry and Coffee",
+          "price": 0.15,
+          "bbox": [
+            114,
+            1396,
+            972,
+            92
+          ]
+        },
+        {
+          "id": "henricis-1927-apple-strudel",
+          "name": "Apple Strudel",
+          "description": "",
+          "category": "Pastry and Coffee",
+          "price": 0.2,
+          "bbox": [
+            114,
+            1488,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "henricis-1927-german-pancake",
+          "name": "German Pancake",
+          "description": "Powdered sugar and lemon",
+          "category": "Pastry and Coffee",
+          "price": 0.5,
+          "bbox": [
+            114,
+            1546,
+            972,
+            92
+          ]
+        },
+        {
+          "id": "henricis-1927-coffee-with-whipped-cream",
+          "name": "Coffee with Whipped Cream",
+          "description": "",
+          "category": "Pastry and Coffee",
+          "price": 0.15,
+          "bbox": [
+            114,
+            1638,
+            972,
+            58
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fritzels-1948",
+      "name": "Fritzel's",
+      "year": 1948,
+      "opened": 1947,
+      "closed": 1972,
+      "address": "201 N State St",
+      "lat": 41.8857,
+      "lng": -87.6277,
+      "cuisine": "Celebrity Supper Club",
+      "emoji": "🍸",
+      "blurb": "State and Lake's see-and-be-seen room, where columnists held court and the portions were as big as the names.",
+      "stillStanding": {
+        "status": "gone",
+        "label": "Closed 1972",
+        "today": "The restaurant is long gone. The State and Lake corner is Loop retail beside the State/Lake 'L' station."
+      },
+      "scan": {
+        "src": "scans/fritzels-1948.png",
+        "width": 1200,
+        "height": 1846,
+        "placeholder": true,
+        "credit": "Generated placeholder. Dishes and prices are period-plausible reconstructions, not a transcription."
+      },
+      "menu": [
+        {
+          "id": "fritzels-1948-jumbo-shrimp-cocktail",
+          "name": "Jumbo Shrimp Cocktail",
+          "description": "",
+          "category": "Appetizers",
+          "price": 0.75,
+          "bbox": [
+            114,
+            426,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "fritzels-1948-chopped-chicken-liver",
+          "name": "Chopped Chicken Liver",
+          "description": "With rye toast",
+          "category": "Appetizers",
+          "price": 0.6,
+          "bbox": [
+            114,
+            484,
+            972,
+            92
+          ]
+        },
+        {
+          "id": "fritzels-1948-marinated-herring",
+          "name": "Marinated Herring",
+          "description": "",
+          "category": "Appetizers",
+          "price": 0.55,
+          "bbox": [
+            114,
+            576,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "fritzels-1948-broiled-prime-sirloin-steak",
+          "name": "Broiled Prime Sirloin Steak",
+          "description": "Aged beef, French fried onions",
+          "category": "Entrees",
+          "price": 3.75,
+          "bbox": [
+            114,
+            730,
+            972,
+            92
+          ]
+        },
+        {
+          "id": "fritzels-1948-roast-prime-ribs-of-beef",
+          "name": "Roast Prime Ribs of Beef",
+          "description": "",
+          "category": "Entrees",
+          "price": 2.95,
+          "bbox": [
+            114,
+            822,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "fritzels-1948-calf-s-liver-and-bacon",
+          "name": "Calf's Liver and Bacon",
+          "description": "",
+          "category": "Entrees",
+          "price": 1.95,
+          "bbox": [
+            114,
+            880,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "fritzels-1948-broiled-lake-trout",
+          "name": "Broiled Lake Trout",
+          "description": "Lemon butter",
+          "category": "Entrees",
+          "price": 1.85,
+          "bbox": [
+            114,
+            938,
+            972,
+            92
+          ]
+        },
+        {
+          "id": "fritzels-1948-chicken-in-the-pot",
+          "name": "Chicken in the Pot",
+          "description": "Matzo ball and noodles",
+          "category": "Entrees",
+          "price": 2.25,
+          "bbox": [
+            114,
+            1030,
+            972,
+            92
+          ]
+        },
+        {
+          "id": "fritzels-1948-corned-beef-hash",
+          "name": "Corned Beef Hash",
+          "description": "With poached egg",
+          "category": "Entrees",
+          "price": 1.5,
+          "bbox": [
+            114,
+            1122,
+            972,
+            92
+          ]
+        },
+        {
+          "id": "fritzels-1948-fritzel-s-chef-salad",
+          "name": "Fritzel's Chef Salad",
+          "description": "",
+          "category": "Salads and Sandwiches",
+          "price": 1.25,
+          "bbox": [
+            114,
+            1310,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "fritzels-1948-hot-pastrami-on-rye",
+          "name": "Hot Pastrami on Rye",
+          "description": "",
+          "category": "Salads and Sandwiches",
+          "price": 0.95,
+          "bbox": [
+            114,
+            1368,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "fritzels-1948-cheesecake",
+          "name": "Cheesecake",
+          "description": "",
+          "category": "Desserts",
+          "price": 0.45,
+          "bbox": [
+            114,
+            1522,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "fritzels-1948-strawberry-shortcake",
+          "name": "Strawberry Shortcake",
+          "description": "",
+          "category": "Desserts",
+          "price": 0.5,
+          "bbox": [
+            114,
+            1580,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "fritzels-1948-coffee",
+          "name": "Coffee",
+          "description": "",
+          "category": "Desserts",
+          "price": 0.15,
+          "bbox": [
+            114,
+            1638,
+            972,
+            58
+          ]
+        }
+      ]
+    },
+    {
+      "id": "berghoff-1952",
+      "name": "The Berghoff",
+      "year": 1952,
+      "opened": 1898,
+      "closed": null,
+      "address": "17 W Adams St",
+      "lat": 41.8793,
+      "lng": -87.6285,
+      "cuisine": "German",
+      "emoji": "🍺",
+      "blurb": "Holder of Chicago's first post-Prohibition liquor license, pouring its own beer beside schnitzel and sauerbraten.",
+      "stillStanding": {
+        "status": "open",
+        "label": "Still open",
+        "today": "The Berghoff. Same address, same oak bar, still family run."
+      },
+      "scan": {
+        "src": "scans/berghoff-1952.png",
+        "width": 1200,
+        "height": 1908,
+        "placeholder": true,
+        "credit": "Generated placeholder. Dishes and prices are period-plausible reconstructions, not a transcription."
+      },
+      "menu": [
+        {
+          "id": "berghoff-1952-herring-in-sour-cream",
+          "name": "Herring in Sour Cream",
+          "description": "",
+          "category": "Appetizers",
+          "price": 0.45,
+          "bbox": [
+            114,
+            426,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "berghoff-1952-liver-dumpling-soup",
+          "name": "Liver Dumpling Soup",
+          "description": "",
+          "category": "Appetizers",
+          "price": 0.25,
+          "bbox": [
+            114,
+            484,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "berghoff-1952-wiener-schnitzel",
+          "name": "Wiener Schnitzel",
+          "description": "German fried potatoes",
+          "category": "German Specialties",
+          "price": 1.65,
+          "bbox": [
+            114,
+            638,
+            972,
+            92
+          ]
+        },
+        {
+          "id": "berghoff-1952-sauerbraten-with-potato-pancake",
+          "name": "Sauerbraten with Potato Pancake",
+          "description": "",
+          "category": "German Specialties",
+          "price": 1.5,
+          "bbox": [
+            114,
+            730,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "berghoff-1952-kassler-rippchen",
+          "name": "Kassler Rippchen",
+          "description": "Smoked pork loin, sauerkraut",
+          "category": "German Specialties",
+          "price": 1.55,
+          "bbox": [
+            114,
+            788,
+            972,
+            92
+          ]
+        },
+        {
+          "id": "berghoff-1952-bratwurst-and-sauerkraut",
+          "name": "Bratwurst and Sauerkraut",
+          "description": "",
+          "category": "German Specialties",
+          "price": 1.1,
+          "bbox": [
+            114,
+            880,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "berghoff-1952-thuringer-sausage",
+          "name": "Thuringer Sausage",
+          "description": "",
+          "category": "German Specialties",
+          "price": 1.05,
+          "bbox": [
+            114,
+            938,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "berghoff-1952-broiled-whitefish",
+          "name": "Broiled Whitefish",
+          "description": "",
+          "category": "From the Lakes",
+          "price": 1.45,
+          "bbox": [
+            114,
+            1092,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "berghoff-1952-fried-lake-perch",
+          "name": "Fried Lake Perch",
+          "description": "Tartar sauce",
+          "category": "From the Lakes",
+          "price": 1.35,
+          "bbox": [
+            114,
+            1150,
+            972,
+            92
+          ]
+        },
+        {
+          "id": "berghoff-1952-creamed-spinach",
+          "name": "Creamed Spinach",
+          "description": "",
+          "category": "Side Dishes",
+          "price": 0.25,
+          "bbox": [
+            114,
+            1338,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "berghoff-1952-german-fried-potatoes",
+          "name": "German Fried Potatoes",
+          "description": "",
+          "category": "Side Dishes",
+          "price": 0.2,
+          "bbox": [
+            114,
+            1396,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "berghoff-1952-apple-strudel",
+          "name": "Apple Strudel",
+          "description": "",
+          "category": "Dessert and Drinks",
+          "price": 0.3,
+          "bbox": [
+            114,
+            1550,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "berghoff-1952-berghoff-beer-stein",
+          "name": "Berghoff Beer, stein",
+          "description": "Light or dark",
+          "category": "Dessert and Drinks",
+          "price": 0.2,
+          "bbox": [
+            114,
+            1608,
+            972,
+            92
+          ]
+        },
+        {
+          "id": "berghoff-1952-berghoff-root-beer",
+          "name": "Berghoff Root Beer",
+          "description": "",
+          "category": "Dessert and Drinks",
+          "price": 0.1,
+          "bbox": [
+            114,
+            1700,
+            972,
+            58
+          ]
+        }
+      ]
+    },
+    {
+      "id": "kon-tiki-ports-1966",
+      "name": "Kon-Tiki Ports",
+      "year": 1966,
+      "opened": 1962,
+      "closed": 1978,
+      "address": "505 N Michigan Ave",
+      "lat": 41.8911,
+      "lng": -87.6238,
+      "cuisine": "Polynesian / Tiki",
+      "emoji": "🗿",
+      "blurb": "A tiki fantasia inside the Sheraton-Chicago, with themed rooms named for Pacific ports and rum drinks to match.",
+      "stillStanding": {
+        "status": "gone",
+        "label": "Closed late 1970s",
+        "today": "InterContinental Chicago Magnificent Mile. The hotel remains, the tiki rooms do not."
+      },
+      "scan": {
+        "src": "scans/kon-tiki-ports-1966.png",
+        "width": 1200,
+        "height": 1904,
+        "placeholder": true,
+        "credit": "Generated placeholder. Dishes and prices are period-plausible reconstructions, not a transcription."
+      },
+      "menu": [
+        {
+          "id": "kon-tiki-ports-1966-egg-roll",
+          "name": "Egg Roll",
+          "description": "",
+          "category": "Pupus",
+          "price": 0.95,
+          "bbox": [
+            114,
+            426,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "kon-tiki-ports-1966-crab-rangoon",
+          "name": "Crab Rangoon",
+          "description": "",
+          "category": "Pupus",
+          "price": 1.25,
+          "bbox": [
+            114,
+            484,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "kon-tiki-ports-1966-barbecued-spareribs",
+          "name": "Barbecued Spareribs",
+          "description": "",
+          "category": "Pupus",
+          "price": 1.75,
+          "bbox": [
+            114,
+            542,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "kon-tiki-ports-1966-pupu-platter-for-two",
+          "name": "Pupu Platter for Two",
+          "description": "Served over a flaming hibachi",
+          "category": "Pupus",
+          "price": 3.5,
+          "bbox": [
+            114,
+            600,
+            972,
+            92
+          ]
+        },
+        {
+          "id": "kon-tiki-ports-1966-mandarin-duck",
+          "name": "Mandarin Duck",
+          "description": "Pressed, with plum sauce",
+          "category": "Entrees",
+          "price": 4.25,
+          "bbox": [
+            114,
+            788,
+            972,
+            92
+          ]
+        },
+        {
+          "id": "kon-tiki-ports-1966-lobster-cantonese",
+          "name": "Lobster Cantonese",
+          "description": "",
+          "category": "Entrees",
+          "price": 4.95,
+          "bbox": [
+            114,
+            880,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "kon-tiki-ports-1966-sweet-and-sour-pork",
+          "name": "Sweet and Sour Pork",
+          "description": "",
+          "category": "Entrees",
+          "price": 3.25,
+          "bbox": [
+            114,
+            938,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "kon-tiki-ports-1966-beef-teriyaki",
+          "name": "Beef Teriyaki",
+          "description": "",
+          "category": "Entrees",
+          "price": 4.5,
+          "bbox": [
+            114,
+            996,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "kon-tiki-ports-1966-chicken-almond",
+          "name": "Chicken Almond",
+          "description": "",
+          "category": "Entrees",
+          "price": 3.25,
+          "bbox": [
+            114,
+            1054,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "kon-tiki-ports-1966-polynesian-shrimp",
+          "name": "Polynesian Shrimp",
+          "description": "Pineapple and green pepper",
+          "category": "Entrees",
+          "price": 3.95,
+          "bbox": [
+            114,
+            1112,
+            972,
+            92
+          ]
+        },
+        {
+          "id": "kon-tiki-ports-1966-mai-tai",
+          "name": "Mai Tai",
+          "description": "",
+          "category": "Exotic Drinks",
+          "price": 1.5,
+          "bbox": [
+            114,
+            1300,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "kon-tiki-ports-1966-zombie",
+          "name": "Zombie",
+          "description": "Limit two per guest",
+          "category": "Exotic Drinks",
+          "price": 1.75,
+          "bbox": [
+            114,
+            1358,
+            972,
+            92
+          ]
+        },
+        {
+          "id": "kon-tiki-ports-1966-scorpion-bowl",
+          "name": "Scorpion Bowl",
+          "description": "For two or more",
+          "category": "Exotic Drinks",
+          "price": 3.0,
+          "bbox": [
+            114,
+            1450,
+            972,
+            92
+          ]
+        },
+        {
+          "id": "kon-tiki-ports-1966-navy-grog",
+          "name": "Navy Grog",
+          "description": "",
+          "category": "Exotic Drinks",
+          "price": 1.5,
+          "bbox": [
+            114,
+            1542,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "kon-tiki-ports-1966-coconut-ice-cream",
+          "name": "Coconut Ice Cream",
+          "description": "",
+          "category": "Dessert",
+          "price": 0.6,
+          "bbox": [
+            114,
+            1696,
+            972,
+            58
+          ]
+        }
+      ]
+    },
+    {
+      "id": "millers-pub-1974",
+      "name": "Miller's Pub",
+      "year": 1974,
+      "opened": 1935,
+      "closed": null,
+      "address": "23 E Adams St",
+      "lat": 41.8795,
+      "lng": -87.6262,
+      "cuisine": "Tavern & Ribs",
+      "emoji": "🍖",
+      "blurb": "The Gallios brothers' late-night Loop tavern, wallpapered in celebrity photos and known for ribs and Tom and Jerrys.",
+      "stillStanding": {
+        "status": "moved",
+        "label": "Moved around the corner",
+        "today": "Miller's Pub relocated to 134 S Wabash Ave after a 1989 fire and is still open there."
+      },
+      "scan": {
+        "src": "scans/millers-pub-1974.png",
+        "width": 1200,
+        "height": 1812,
+        "placeholder": true,
+        "credit": "Generated placeholder. Dishes and prices are period-plausible reconstructions, not a transcription."
+      },
+      "menu": [
+        {
+          "id": "millers-pub-1974-french-onion-soup",
+          "name": "French Onion Soup",
+          "description": "",
+          "category": "Starters",
+          "price": 0.95,
+          "bbox": [
+            114,
+            426,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "millers-pub-1974-shrimp-cocktail",
+          "name": "Shrimp Cocktail",
+          "description": "",
+          "category": "Starters",
+          "price": 2.25,
+          "bbox": [
+            114,
+            484,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "millers-pub-1974-greek-salad",
+          "name": "Greek Salad",
+          "description": "Feta, olives, anchovy",
+          "category": "Starters",
+          "price": 1.95,
+          "bbox": [
+            114,
+            542,
+            972,
+            92
+          ]
+        },
+        {
+          "id": "millers-pub-1974-barbecued-baby-back-ribs",
+          "name": "Barbecued Baby Back Ribs",
+          "description": "Full slab, our famous sauce",
+          "category": "House Specialties",
+          "price": 5.95,
+          "bbox": [
+            114,
+            730,
+            972,
+            92
+          ]
+        },
+        {
+          "id": "millers-pub-1974-broiled-lake-superior-whitefish",
+          "name": "Broiled Lake Superior Whitefish",
+          "description": "",
+          "category": "House Specialties",
+          "price": 4.75,
+          "bbox": [
+            114,
+            822,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "millers-pub-1974-new-york-strip-steak",
+          "name": "New York Strip Steak",
+          "description": "",
+          "category": "House Specialties",
+          "price": 7.5,
+          "bbox": [
+            114,
+            880,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "millers-pub-1974-half-broiled-chicken",
+          "name": "Half Broiled Chicken",
+          "description": "",
+          "category": "House Specialties",
+          "price": 3.95,
+          "bbox": [
+            114,
+            938,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "millers-pub-1974-corned-beef-and-cabbage",
+          "name": "Corned Beef and Cabbage",
+          "description": "",
+          "category": "House Specialties",
+          "price": 3.75,
+          "bbox": [
+            114,
+            996,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "millers-pub-1974-pub-burger",
+          "name": "Pub Burger",
+          "description": "Half pound, with fries",
+          "category": "Sandwiches",
+          "price": 1.95,
+          "bbox": [
+            114,
+            1150,
+            972,
+            92
+          ]
+        },
+        {
+          "id": "millers-pub-1974-reuben",
+          "name": "Reuben",
+          "description": "",
+          "category": "Sandwiches",
+          "price": 2.25,
+          "bbox": [
+            114,
+            1242,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "millers-pub-1974-prime-rib-sandwich",
+          "name": "Prime Rib Sandwich",
+          "description": "",
+          "category": "Sandwiches",
+          "price": 3.25,
+          "bbox": [
+            114,
+            1300,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "millers-pub-1974-tom-and-jerry",
+          "name": "Tom and Jerry",
+          "description": "In season",
+          "category": "Drinks and Dessert",
+          "price": 0.95,
+          "bbox": [
+            114,
+            1454,
+            972,
+            92
+          ]
+        },
+        {
+          "id": "millers-pub-1974-draft-beer",
+          "name": "Draft Beer",
+          "description": "",
+          "category": "Drinks and Dessert",
+          "price": 0.6,
+          "bbox": [
+            114,
+            1546,
+            972,
+            58
+          ]
+        },
+        {
+          "id": "millers-pub-1974-cheesecake",
+          "name": "Cheesecake",
+          "description": "",
+          "category": "Drinks and Dessert",
+          "price": 0.95,
+          "bbox": [
+            114,
+            1604,
+            972,
+            58
+          ]
+        }
+      ]
+    }
+  ]
+}

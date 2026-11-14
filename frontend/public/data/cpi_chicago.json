@@ -1,0 +1,393 @@
+{
+  "base_year": 2026,
+  "base_cpi": 330.0,
+  "base_cpi_is_estimate": true,
+  "series": "BLS CPI-U, U.S. city average, annual average, 1982-84=100",
+  "note": "multiplier = base_cpi / cpi. Multiply a historical price by the multiplier to get 2026 dollars. 1890-1912 are Minneapolis Fed estimates; the 2026 base is an estimate until BLS publishes the annual average. Regenerate with pipeline/build_cpi.py.",
+  "years": {
+    "1890": {
+      "cpi": 9.0,
+      "multiplier": 36.67
+    },
+    "1891": {
+      "cpi": 9.0,
+      "multiplier": 36.67
+    },
+    "1892": {
+      "cpi": 9.0,
+      "multiplier": 36.67
+    },
+    "1893": {
+      "cpi": 9.0,
+      "multiplier": 36.67
+    },
+    "1894": {
+      "cpi": 8.7,
+      "multiplier": 37.93
+    },
+    "1895": {
+      "cpi": 8.4,
+      "multiplier": 39.29
+    },
+    "1896": {
+      "cpi": 8.4,
+      "multiplier": 39.29
+    },
+    "1897": {
+      "cpi": 8.4,
+      "multiplier": 39.29
+    },
+    "1898": {
+      "cpi": 8.4,
+      "multiplier": 39.29
+    },
+    "1899": {
+      "cpi": 8.4,
+      "multiplier": 39.29
+    },
+    "1900": {
+      "cpi": 8.4,
+      "multiplier": 39.29
+    },
+    "1901": {
+      "cpi": 8.4,
+      "multiplier": 39.29
+    },
+    "1902": {
+      "cpi": 8.7,
+      "multiplier": 37.93
+    },
+    "1903": {
+      "cpi": 9.0,
+      "multiplier": 36.67
+    },
+    "1904": {
+      "cpi": 9.0,
+      "multiplier": 36.67
+    },
+    "1905": {
+      "cpi": 9.0,
+      "multiplier": 36.67
+    },
+    "1906": {
+      "cpi": 9.0,
+      "multiplier": 36.67
+    },
+    "1907": {
+      "cpi": 9.4,
+      "multiplier": 35.11
+    },
+    "1908": {
+      "cpi": 9.0,
+      "multiplier": 36.67
+    },
+    "1909": {
+      "cpi": 9.0,
+      "multiplier": 36.67
+    },
+    "1910": {
+      "cpi": 9.4,
+      "multiplier": 35.11
+    },
+    "1911": {
+      "cpi": 9.4,
+      "multiplier": 35.11
+    },
+    "1912": {
+      "cpi": 9.7,
+      "multiplier": 34.02
+    },
+    "1913": {
+      "cpi": 9.9,
+      "multiplier": 33.33
+    },
+    "1914": {
+      "cpi": 10.0,
+      "multiplier": 33.0
+    },
+    "1915": {
+      "cpi": 10.1,
+      "multiplier": 32.67
+    },
+    "1916": {
+      "cpi": 10.9,
+      "multiplier": 30.28
+    },
+    "1917": {
+      "cpi": 12.8,
+      "multiplier": 25.78
+    },
+    "1918": {
+      "cpi": 15.1,
+      "multiplier": 21.85
+    },
+    "1919": {
+      "cpi": 17.3,
+      "multiplier": 19.08
+    },
+    "1920": {
+      "cpi": 20.0,
+      "multiplier": 16.5
+    },
+    "1921": {
+      "cpi": 17.9,
+      "multiplier": 18.44
+    },
+    "1922": {
+      "cpi": 16.8,
+      "multiplier": 19.64
+    },
+    "1923": {
+      "cpi": 17.1,
+      "multiplier": 19.3
+    },
+    "1924": {
+      "cpi": 17.1,
+      "multiplier": 19.3
+    },
+    "1925": {
+      "cpi": 17.5,
+      "multiplier": 18.86
+    },
+    "1926": {
+      "cpi": 17.7,
+      "multiplier": 18.64
+    },
+    "1927": {
+      "cpi": 17.4,
+      "multiplier": 18.97
+    },
+    "1928": {
+      "cpi": 17.1,
+      "multiplier": 19.3
+    },
+    "1929": {
+      "cpi": 17.1,
+      "multiplier": 19.3
+    },
+    "1930": {
+      "cpi": 16.7,
+      "multiplier": 19.76
+    },
+    "1931": {
+      "cpi": 15.2,
+      "multiplier": 21.71
+    },
+    "1932": {
+      "cpi": 13.7,
+      "multiplier": 24.09
+    },
+    "1933": {
+      "cpi": 13.0,
+      "multiplier": 25.38
+    },
+    "1934": {
+      "cpi": 13.4,
+      "multiplier": 24.63
+    },
+    "1935": {
+      "cpi": 13.7,
+      "multiplier": 24.09
+    },
+    "1936": {
+      "cpi": 13.9,
+      "multiplier": 23.74
+    },
+    "1937": {
+      "cpi": 14.4,
+      "multiplier": 22.92
+    },
+    "1938": {
+      "cpi": 14.1,
+      "multiplier": 23.4
+    },
+    "1939": {
+      "cpi": 13.9,
+      "multiplier": 23.74
+    },
+    "1940": {
+      "cpi": 14.0,
+      "multiplier": 23.57
+    },
+    "1941": {
+      "cpi": 14.7,
+      "multiplier": 22.45
+    },
+    "1942": {
+      "cpi": 16.3,
+      "multiplier": 20.25
+    },
+    "1943": {
+      "cpi": 17.3,
+      "multiplier": 19.08
+    },
+    "1944": {
+      "cpi": 17.6,
+      "multiplier": 18.75
+    },
+    "1945": {
+      "cpi": 18.0,
+      "multiplier": 18.33
+    },
+    "1946": {
+      "cpi": 19.5,
+      "multiplier": 16.92
+    },
+    "1947": {
+      "cpi": 22.3,
+      "multiplier": 14.8
+    },
+    "1948": {
+      "cpi": 24.1,
+      "multiplier": 13.69
+    },
+    "1949": {
+      "cpi": 23.8,
+      "multiplier": 13.87
+    },
+    "1950": {
+      "cpi": 24.1,
+      "multiplier": 13.69
+    },
+    "1951": {
+      "cpi": 26.0,
+      "multiplier": 12.69
+    },
+    "1952": {
+      "cpi": 26.5,
+      "multiplier": 12.45
+    },
+    "1953": {
+      "cpi": 26.7,
+      "multiplier": 12.36
+    },
+    "1954": {
+      "cpi": 26.9,
+      "multiplier": 12.27
+    },
+    "1955": {
+      "cpi": 26.8,
+      "multiplier": 12.31
+    },
+    "1956": {
+      "cpi": 27.2,
+      "multiplier": 12.13
+    },
+    "1957": {
+      "cpi": 28.1,
+      "multiplier": 11.74
+    },
+    "1958": {
+      "cpi": 28.9,
+      "multiplier": 11.42
+    },
+    "1959": {
+      "cpi": 29.1,
+      "multiplier": 11.34
+    },
+    "1960": {
+      "cpi": 29.6,
+      "multiplier": 11.15
+    },
+    "1961": {
+      "cpi": 29.9,
+      "multiplier": 11.04
+    },
+    "1962": {
+      "cpi": 30.2,
+      "multiplier": 10.93
+    },
+    "1963": {
+      "cpi": 30.6,
+      "multiplier": 10.78
+    },
+    "1964": {
+      "cpi": 31.0,
+      "multiplier": 10.65
+    },
+    "1965": {
+      "cpi": 31.5,
+      "multiplier": 10.48
+    },
+    "1966": {
+      "cpi": 32.4,
+      "multiplier": 10.19
+    },
+    "1967": {
+      "cpi": 33.4,
+      "multiplier": 9.88
+    },
+    "1968": {
+      "cpi": 34.8,
+      "multiplier": 9.48
+    },
+    "1969": {
+      "cpi": 36.7,
+      "multiplier": 8.99
+    },
+    "1970": {
+      "cpi": 38.8,
+      "multiplier": 8.51
+    },
+    "1971": {
+      "cpi": 40.5,
+      "multiplier": 8.15
+    },
+    "1972": {
+      "cpi": 41.8,
+      "multiplier": 7.89
+    },
+    "1973": {
+      "cpi": 44.4,
+      "multiplier": 7.43
+    },
+    "1974": {
+      "cpi": 49.3,
+      "multiplier": 6.69
+    },
+    "1975": {
+      "cpi": 53.8,
+      "multiplier": 6.13
+    },
+    "1976": {
+      "cpi": 56.9,
+      "multiplier": 5.8
+    },
+    "1977": {
+      "cpi": 60.6,
+      "multiplier": 5.45
+    },
+    "1978": {
+      "cpi": 65.2,
+      "multiplier": 5.06
+    },
+    "1979": {
+      "cpi": 72.6,
+      "multiplier": 4.55
+    },
+    "1980": {
+      "cpi": 82.4,
+      "multiplier": 4.0
+    },
+    "1981": {
+      "cpi": 90.9,
+      "multiplier": 3.63
+    },
+    "1982": {
+      "cpi": 96.5,
+      "multiplier": 3.42
+    },
+    "1983": {
+      "cpi": 99.6,
+      "multiplier": 3.31
+    },
+    "1984": {
+      "cpi": 103.9,
+      "multiplier": 3.18
+    },
+    "1985": {
+      "cpi": 107.6,
+      "multiplier": 3.07
+    }
+  }
+}
