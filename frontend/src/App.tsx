@@ -310,9 +310,10 @@ export default function App() {
         )}
 
         <footer className="mt-10 border-t border-rule pt-4 text-xs text-muted">
-          Menus are machine-read from archival scans (New York Public Library via Wikimedia Commons, and the Internet
-          Archive), so expect OCR slips; tap any dish to check it against the original. Inflation uses national CPI-U;
-          tax rates are approximate. Map data © OpenStreetMap contributors.
+          Menus are from the New York Public Library’s volunteer-transcribed “What’s on the Menu?” dataset, plus a
+          few machine-read Internet Archive scans. Scan images load from those libraries’ servers when you open a
+          dish. Railroad dining cars are pinned at their Chicago terminal. Inflation uses national CPI-U; tax rates
+          are approximate. Map data © OpenStreetMap contributors.
         </footer>
       </main>
 
