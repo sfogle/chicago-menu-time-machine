@@ -6,9 +6,26 @@ export interface Dish {
   description: string
   category: string
   price: number
-  /** Pixel box on the scan image: [x, y, width, height]. */
-  bbox: BBox
+  /** Pixel box on the scan image: [x, y, width, height]. Present for OCR'd menus. */
+  bbox?: BBox
+  /**
+   * Normalised (0-1) point on the page, [x, y], as recorded by NYPL's
+   * "What's on the Menu?" volunteers. It marks roughly where the dish's text
+   * starts, not a full box.
+   */
+  pos?: [x: number, y: number]
+  /** Index into Restaurant.pages for multi-page menus (default 0). */
+  page?: number
   confidence?: number
+}
+
+/** One page image of a menu. `src` is a path under public/ or a full http(s) URL. */
+export interface ScanPage {
+  src: string
+  /** Tried once if `src` fails to load (NYPL refuses large sizes for some later menus). */
+  fallbackSrc?: string
+  width: number
+  height: number
 }
 
 export interface Restaurant {
@@ -31,15 +48,16 @@ export interface Restaurant {
     label: string
     today: string
   }
-  scan: {
-    src: string
-    width: number
-    height: number
+  /** First (or only) page, plus credit details for the whole menu. */
+  scan: ScanPage & {
     placeholder: boolean
     credit: string
     sourceUrl?: string
     license?: string
   }
+  /** All page images when the menu has more than one; dishes point at these by index. */
+  pages?: ScanPage[]
+  source?: string
   menu: Dish[]
 }
 

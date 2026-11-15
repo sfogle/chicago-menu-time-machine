@@ -17,6 +17,11 @@ interface Props {
 export default function MenuModal({ restaurant, multiplier, baseYear, initialDishId, bagQty, onAdd, onClose }: Props) {
   const [dishId, setDishId] = useState<string | null>(initialDishId)
   const dish = restaurant.menu.find((d) => d.id === dishId) ?? null
+  // Once the scan drawer has been opened it stays mounted (just hidden) so the
+  // page images it has loaded are kept in the DOM and never requested again.
+  const [lastDish, setLastDish] = useState<Dish | null>(dish)
+  if (dish && dish !== lastDish) setLastDish(dish)
+  const shown = dish ?? lastDish
 
   const categories = useMemo(() => {
     const groups = new Map<string, Dish[]>()
@@ -131,17 +136,23 @@ export default function MenuModal({ restaurant, multiplier, baseYear, initialDis
         </div>
 
         {/* scan proof: covers the menu on phones, sits beside it on desktop */}
-        {dish && (
+        {shown && (
           <aside
             aria-label="Original scan proof"
-            className="slide-left absolute inset-0 z-20 lg:static lg:w-1/2 lg:shrink-0 lg:border-l-2 lg:border-ink"
+            aria-hidden={!dish}
+            className={
+              dish
+                ? 'slide-left absolute inset-0 z-20 lg:static lg:w-1/2 lg:shrink-0 lg:border-l-2 lg:border-ink'
+                : 'hidden'
+            }
           >
             <ScanProof
               restaurant={restaurant}
-              dish={dish}
+              dish={shown}
+              active={!!dish}
               multiplier={multiplier}
               baseYear={baseYear}
-              onAdd={() => onAdd(dish)}
+              onAdd={() => onAdd(shown)}
               onClose={() => setDishId(null)}
             />
           </aside>

@@ -242,3 +242,15 @@ button {
     transition: none !important;
   }
 }
+
+/* exact point marked by a transcriber, shown inside an estimated highlight box */
+.scan-pin {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border-radius: 50%;
+  background: var(--color-brick);
+  border: 2px solid #fff;
+  pointer-events: none;
+}
