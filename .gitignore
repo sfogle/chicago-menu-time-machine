@@ -7,3 +7,6 @@ __pycache__/
 
 # downloaded source scans (see pipeline/fetch_and_ocr_chicago.py)
 pipeline/raw_scans/
+
+# NYPL bulk dataset cache (see pipeline/import_nypl_chicago.py)
+pipeline/nypl_data/

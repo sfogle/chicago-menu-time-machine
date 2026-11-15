@@ -382,7 +382,8 @@ def build_entry(args: argparse.Namespace, dishes: list[dict], engine: str, size:
             "today": args.today or "Nobody has checked what stands at this address today.",
         },
         "scan": {
-            "src": f"scans/{entry_id}{args.image.suffix.lower()}",
+            # an external URL is stored as-is; otherwise the scan is copied into public/scans/
+            "src": getattr(args, "scan_url", None) or f"scans/{entry_id}{args.image.suffix.lower()}",
             "width": size[0],
             "height": size[1],
             "placeholder": False,
@@ -404,6 +405,7 @@ def build_entry(args: argparse.Namespace, dishes: list[dict], engine: str, size:
 
 
 def save_entry(entry: dict, image: Path, menus_path: Path, scans_dir: Path, replace: bool) -> None:
+    remote = entry["scan"]["src"].startswith(("http://", "https://"))
     doc = {"version": 1, "restaurants": []}
     if menus_path.exists():
         doc = json.loads(menus_path.read_text())
@@ -415,13 +417,15 @@ def save_entry(entry: dict, image: Path, menus_path: Path, scans_dir: Path, repl
     doc["restaurants"] = [r for r in doc["restaurants"] if r["id"] != entry["id"]] + [entry]
     doc["restaurants"].sort(key=lambda r: (r["year"], r["name"]))
 
-    scans_dir.mkdir(parents=True, exist_ok=True)
-    dest = scans_dir / Path(entry["scan"]["src"]).name
-    if image.resolve() != dest.resolve():
-        shutil.copyfile(image, dest)
+    if not remote:
+        scans_dir.mkdir(parents=True, exist_ok=True)
+        dest = scans_dir / Path(entry["scan"]["src"]).name
+        if image.resolve() != dest.resolve():
+            shutil.copyfile(image, dest)
+        print(f"copied scan -> {dest}", file=sys.stderr)
     menus_path.parent.mkdir(parents=True, exist_ok=True)
-    menus_path.write_text(json.dumps(doc, indent=2, ensure_ascii=False) + "\n")
-    print(f"copied scan -> {dest}", file=sys.stderr)
+    # compact, like import_nypl_chicago.py writes it
+    menus_path.write_text(json.dumps(doc, ensure_ascii=False, separators=(",", ":")) + "\n")
     print(f"{'replaced' if existing else 'appended'} {entry['id']} in {menus_path}", file=sys.stderr)
 
 
@@ -440,6 +444,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--blurb", default="", help="one-sentence description for the card")
     p.add_argument("--today", default="", help="what occupies the address today")
     p.add_argument("--credit", default="", help="scan source, e.g. 'NYPL Buttolph Collection'")
+    p.add_argument("--scan-url", help="public URL of the scan; the app loads it from there and no image is "
+                                      "copied into the repo (the URL must serve this same image)")
     p.add_argument("--engine", choices=["auto", "paddle", "tesseract"], default="auto")
     p.add_argument("--menus", type=Path, default=DEFAULT_MENUS, help="menus.json to update")
     p.add_argument("--scans-dir", type=Path, default=DEFAULT_SCANS, help="where to copy the scan")
