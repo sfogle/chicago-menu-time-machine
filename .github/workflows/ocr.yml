@@ -1,0 +1,144 @@
+name: OCR a menu scan
+
+# Manual only: Actions tab -> "OCR a menu scan" -> Run workflow.
+# Downloads one scan, OCRs it with Tesseract on GitHub's runner, and commits
+# the new entry to frontend/public/data/menus.json. The image itself is not
+# committed: the app loads it from image_url, so that URL has to stay public.
+on:
+  workflow_dispatch:
+    inputs:
+      image_url:
+        description: "Direct https URL of the scan image (JPEG or PNG)"
+        required: true
+        type: string
+      restaurant:
+        description: "Restaurant name"
+        required: true
+        type: string
+      year:
+        description: "Year the menu was printed"
+        required: true
+        type: string
+      address:
+        description: "Street address in Chicago"
+        required: true
+        type: string
+      cuisine:
+        description: "Cuisine or kind of place"
+        required: false
+        default: "Restaurant"
+        type: string
+      credit:
+        description: "Where the scan comes from (collection, licence)"
+        required: false
+        default: ""
+        type: string
+
+permissions:
+  contents: write # commit menus.json
+  actions: write # start the deploy workflow afterwards
+
+concurrency:
+  group: ocr-menu
+  cancel-in-progress: false
+
+jobs:
+  ocr:
+    runs-on: ubuntu-latest
+    # Inputs are passed through the environment and never pasted into a script,
+    # so nothing typed into the form can be run as a command.
+    env:
+      IMAGE_URL: ${{ inputs.image_url }}
+      RESTAURANT: ${{ inputs.restaurant }}
+      YEAR: ${{ inputs.year }}
+      ADDRESS: ${{ inputs.address }}
+      CUISINE: ${{ inputs.cuisine }}
+      CREDIT: ${{ inputs.credit }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Check inputs
+        run: |
+          case "$IMAGE_URL" in
+            https://*) ;;
+            *) echo "::error::image_url must start with https://"; exit 1 ;;
+          esac
+          if ! printf '%s' "$YEAR" | grep -Eq '^(18|19)[0-9]{2}$'; then
+            echo "::error::year must be a four-digit year between 1800 and 1999"; exit 1
+          fi
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Install Tesseract
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq tesseract-ocr
+          pip install --quiet "Pillow>=10" "pytesseract>=0.3.10"
+
+      - name: Download the scan
+        run: |
+          mkdir -p "$RUNNER_TEMP/scan"
+          curl --fail --silent --show-error --location --proto '=https' --max-filesize 40000000 \
+            --user-agent "chicago-menu-time-machine-pipeline/0.1" \
+            --output "$RUNNER_TEMP/scan/menu" "$IMAGE_URL"
+          # refuse anything that is not actually an image, and give the file a real extension
+          python - <<'PY'
+          import os, sys
+          from PIL import Image
+          src = os.path.join(os.environ["RUNNER_TEMP"], "scan", "menu")
+          try:
+              with Image.open(src) as im:
+                  im.verify()
+                  fmt = im.format
+          except Exception as exc:
+              sys.exit(f"::error::image_url did not return a readable image ({exc})")
+          ext = {"JPEG": ".jpg", "PNG": ".png", "TIFF": ".tif", "WEBP": ".webp"}.get(fmt)
+          if not ext:
+              sys.exit(f"::error::unsupported image format {fmt}")
+          os.rename(src, src + ext)
+          with open(os.environ["GITHUB_ENV"], "a") as env:
+              env.write(f"SCAN_FILE={src + ext}\n")
+          PY
+
+      - name: OCR and add to menus.json
+        working-directory: pipeline
+        run: |
+          python ocr_menu.py \
+            --image "$SCAN_FILE" \
+            --scan-url "$IMAGE_URL" \
+            --restaurant "$RESTAURANT" \
+            --year "$YEAR" \
+            --address "$ADDRESS" \
+            --cuisine "$CUISINE" \
+            --credit "$CREDIT" \
+            --engine tesseract \
+            --geocode \
+            --replace
+          python clean_menus.py --only ocr
+
+      - name: Commit
+        id: commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add frontend/public/data/menus.json
+          if git diff --cached --quiet; then
+            echo "Nothing changed."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # the message comes from a file so the restaurant name is never interpreted by the shell
+          printf 'Add %s (%s) menu via OCR workflow\n' "$RESTAURANT" "$YEAR" > "$RUNNER_TEMP/msg"
+          git commit --quiet --file "$RUNNER_TEMP/msg"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      # A push made with the workflow's own token does not trigger other
+      # workflows, so start the Pages deploy explicitly.
+      - name: Deploy the site
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy.yml --ref "$GITHUB_REF_NAME"
