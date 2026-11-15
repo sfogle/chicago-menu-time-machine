@@ -25,7 +25,7 @@ export default function App() {
   const [cpi, setCpi] = useState<CpiFile | null>(null)
   const [error, setError] = useState<string | null>(null)
 
-  const [year, setYear] = useState(1952)
+  const [year, setYear] = useState(1900)
   const [search, setSearch] = useState('')
   const [view, setView] = useState<'list' | 'map'>('list')
   const [where, setWhere] = useState<Located>({ point: THE_LOOP, label: 'The Loop (default)' })
@@ -310,8 +310,9 @@ export default function App() {
         )}
 
         <footer className="mt-10 border-t border-rule pt-4 text-xs text-muted">
-          Seed menus are period-plausible reconstructions on generated placeholder scans, not transcriptions. Inflation
-          uses national CPI-U; tax rates are approximate. Map data © OpenStreetMap contributors.
+          Menus are machine-read from archival scans (New York Public Library via Wikimedia Commons, and the Internet
+          Archive), so expect OCR slips; tap any dish to check it against the original. Inflation uses national CPI-U;
+          tax rates are approximate. Map data © OpenStreetMap contributors.
         </footer>
       </main>
 

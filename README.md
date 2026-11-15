@@ -141,3 +141,22 @@ First time only:
 Every push to `main` then runs `.github/workflows/deploy.yml`, which builds
 `frontend/` and publishes `frontend/dist` to
 `https://<your-username>.github.io/chicago-menu-time-machine/`.
+
+## Real menus: `pipeline/fetch_and_ocr_chicago.py`
+
+```bash
+cd pipeline && source .venv/bin/activate
+python fetch_and_ocr_chicago.py --dry-run   # download + OCR only
+python fetch_and_ocr_chicago.py             # also write menus.json and scans
+```
+
+Lists Chicago menus on Wikimedia Commons (NYPL Buttolph Collection, public
+domain) and the Internet Archive (items with a stated licence), downloads the
+page images to the gitignored `pipeline/raw_scans/`, OCRs them through
+`ocr_menu.py`, keeps the best priced page per restaurant, and replaces the
+generated placeholder entries. The current dataset is 11 menus from 1893-1912;
+neither API had usable Chicago restaurant menus from 1920-1980. Venue details
+(years open, what stands there today, pins for pre-1909 street numbers) are
+hand-entered in `KNOWN_VENUES` and should be checked. The Internet Archive
+scans are CC BY-ND 4.0 and are published resized but otherwise unaltered.
+To bring the placeholder menus back: `python generate_placeholder_scans.py`.

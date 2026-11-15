@@ -65,6 +65,9 @@ class Fragment:
 # ---------------------------------------------------------------------------
 # OCR engines
 # ---------------------------------------------------------------------------
+_PADDLE: dict = {}
+
+
 def ocr_paddle(image_path: Path) -> list[Fragment]:
     """PaddleOCR. Supports both the 2.x (`.ocr`) and 3.x (`.predict`) APIs."""
     from paddleocr import PaddleOCR  # noqa: PLC0415 (optional dependency)
@@ -81,12 +84,14 @@ def ocr_paddle(image_path: Path) -> list[Fragment]:
             ))
 
     try:  # 3.x
-        engine = PaddleOCR(
-            lang="en",
-            use_doc_orientation_classify=False,
-            use_doc_unwarping=False,
-            use_textline_orientation=False,
-        )
+        if "v3" not in _PADDLE:  # loading the models is slow; keep one engine per process
+            _PADDLE["v3"] = PaddleOCR(
+                lang="en",
+                use_doc_orientation_classify=False,
+                use_doc_unwarping=False,
+                use_textline_orientation=False,
+            )
+        engine = _PADDLE["v3"]
         for page in engine.predict(str(image_path)):
             data = page.json["res"] if hasattr(page, "json") else page
             polys = data.get("rec_polys") or data.get("dt_polys") or []
@@ -171,6 +176,39 @@ CENTS_RE = re.compile(r"(\d{1,2})\s?(?:¢|c|cts?\.?)\s*$", re.IGNORECASE)
 BARE_RE = re.compile(r"[.·•_\s]{4,}(\d{1,3})\s*$")
 LEADERS_RE = re.compile(r"(?:[.·•_…]\s*){2,}|[-–—]{3,}")
 JUNK_RE = re.compile(r"^[.·•_…\-–—|~=]+$")  # fragments that are only leaders/rules
+# "Smoked Sturgeon 25": words, then a bare price with no leaders. Old menus
+# price in multiples of five cents, which keeps "Table 12" from matching.
+INLINE_RE = re.compile(r"[A-Za-z][A-Za-z)\]'.,]*\s+(\d{1,3})\s*$")
+
+
+def ends_with_price(text: str) -> bool:
+    if PRICE_RE.search(text) or CENTS_RE.search(text) or BARE_RE.search(text):
+        return True
+    m = INLINE_RE.search(text)
+    return bool(m) and int(m.group(1)) % 5 == 0 and int(m.group(1)) > 0
+
+
+def split_cells(row: list[Fragment]) -> list[list[Fragment]]:
+    """Split a visual row into cells, each ending at a price.
+
+    Menus are often set in two or three columns, so one row can hold several
+    "dish price" pairs. A single-column row comes back as one cell.
+    """
+    cells: list[list[Fragment]] = []
+    current: list[Fragment] = []
+    for frag in row:
+        current.append(frag)
+        if ends_with_price(" ".join(f.text for f in current)):
+            cells.append(current)
+            current = []
+    if current:
+        # trailing fragments with no price: leaders/noise after the last price
+        # belong to it, otherwise they are an unpriced cell of their own
+        if cells and not any(c.isalpha() for f in current for c in f.text):
+            cells[-1].extend(current)
+        else:
+            cells.append(current)
+    return cells
 
 
 def split_price(row: list[Fragment]) -> tuple[str, float | None, bool]:
@@ -190,6 +228,9 @@ def split_price(row: list[Fragment]) -> tuple[str, float | None, bool]:
         return text[: m.start()], int(m.group(1)) / 100, False
     m = BARE_RE.search(text)
     if m:
+        return text[: m.start(1)], float(m.group(1)), True
+    m = INLINE_RE.search(text)
+    if m and int(m.group(1)) % 5 == 0 and int(m.group(1)) > 0:
         return text[: m.start(1)], float(m.group(1)), True
     # a lone number set well apart at the right-hand end of the row
     if len(row) >= 2 and re.fullmatch(r"\d{1,3}", row[-1].text):
@@ -228,6 +269,14 @@ def parse_menu(rows: list[list[Fragment]], year: int) -> list[dict]:
     category = "Menu"
     last: dict | None = None  # most recent dish, for attaching descriptions
 
+    # work cell by cell so multi-column rows give one dish per column
+    cells: list[list[Fragment]] = []
+    shared: list[bool] = []  # True when the cell shares its row with others
+    for row in rows:
+        parts = split_cells(row)
+        cells.extend(parts)
+        shared.extend([len(parts) > 1] * len(parts))
+    rows = cells
     split = [split_price(row) for row in rows]
     # If any price on the page has a decimal point, a bare "45" is a ".45" whose
     # point was lost. Otherwise fall back on the era: before the 1960s menus
@@ -235,7 +284,7 @@ def parse_menu(rows: list[list[Fragment]], year: int) -> list[dict]:
     has_decimal = any(price is not None and not bare for _, price, bare in split)
     bare_is_cents = has_decimal or year < 1960
 
-    for row, (name_part, price, bare) in zip(rows, split):
+    for row, (name_part, price, bare), in_columns in zip(rows, split, shared):
         raw = " ".join(f.text for f in row)
         if bare and (bare_is_cents or price >= 100):
             price = price / 100
@@ -243,7 +292,8 @@ def parse_menu(rows: list[list[Fragment]], year: int) -> list[dict]:
         box = bbox_of(row)
 
         if price is not None and sum(c.isalpha() for c in name) >= 3:
-            last = {
+            last = None if in_columns else {}
+            dish = {
                 "name": name,
                 "description": "",
                 "category": category,
@@ -252,7 +302,9 @@ def parse_menu(rows: list[list[Fragment]], year: int) -> list[dict]:
                 "confidence": round(statistics.mean(f.conf for f in row), 1),
                 "_frags": list(row),
             }
-            dishes.append(last)
+            dishes.append(dish)
+            if last is not None:
+                last = dish
             continue
 
         text = clean_name(raw)
@@ -262,6 +314,8 @@ def parse_menu(rows: list[list[Fragment]], year: int) -> list[dict]:
             continue
 
         # A short unpriced line sitting directly under a dish is its description.
+        if in_columns:
+            last = None  # can't tell which column a stray line belongs to
         if last and sum(c.isalpha() for c in text) >= 3:
             prev = last["bbox"]
             gap = box[1] - (prev[1] + prev[3])

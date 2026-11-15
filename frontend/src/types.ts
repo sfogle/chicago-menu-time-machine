@@ -18,6 +18,8 @@ export interface Restaurant {
   year: number
   opened: number
   closed: number | null
+  /** false when opened/closed are unknown and only the menu's own year is certain */
+  yearsKnown?: boolean
   address: string
   lat: number
   lng: number
@@ -35,6 +37,8 @@ export interface Restaurant {
     height: number
     placeholder: boolean
     credit: string
+    sourceUrl?: string
+    license?: string
   }
   menu: Dish[]
 }

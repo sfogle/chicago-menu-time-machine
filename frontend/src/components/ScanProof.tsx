@@ -99,6 +99,14 @@ export default function ScanProof({ restaurant, dish, multiplier, baseYear, onAd
         <p className="mt-3 text-xs text-white/60">
           {scan.placeholder && <strong className="text-mustard">Placeholder scan. </strong>}
           {scan.credit || 'Scan source not recorded.'}
+          {scan.sourceUrl && (
+            <>
+              {' '}
+              <a href={scan.sourceUrl} target="_blank" rel="noreferrer" className="underline hover:text-white">
+                View source
+              </a>
+            </>
+          )}
           <span className="mt-1 block font-mono">
             bbox [x, y, w, h] = [{dish.bbox.join(', ')}] on {scan.width}×{scan.height}px
           </span>

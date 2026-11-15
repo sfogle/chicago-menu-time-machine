@@ -10,6 +10,11 @@ const STANDING_STYLE: Record<Restaurant['stillStanding']['status'], { icon: stri
 
 /** "Open 1898–today", "Opens in 3 years", "Closed 12 years earlier" */
 export function eraNote(r: Restaurant, year: number): { open: boolean; text: string } {
+  if (r.yearsKnown === false) {
+    // only the menu's date is certain: treat the place as open for a few years either side
+    const open = Math.abs(year - r.year) <= 5
+    return { open, text: open ? `Serving in ${r.year} · other years unknown` : `Known from ${r.year} only` }
+  }
   if (year < r.opened) {
     const n = r.opened - year
     return { open: false, text: `Not open yet · opens in ${n} year${n === 1 ? '' : 's'}` }
