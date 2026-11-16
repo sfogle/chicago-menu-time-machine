@@ -40,7 +40,7 @@ type-checks and writes the production site to `frontend/dist`.
 ## Where the menus come from
 
 **36 menus** come from the New York Public Library's
-[What's on the Menu?](https://menus.nypl.org/) open dataset: dishes and prices
+[What's on the Menu?](https://www.nypl.org/research/support/whats-on-the-menu) open dataset: dishes and prices
 transcribed by volunteers, so there is no OCR involved. **5 more** are
 Internet Archive hotel menus (1907-1912) read by OCR.
 

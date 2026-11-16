@@ -200,10 +200,15 @@ export default function ScanProof({ restaurant, dish, active, multiplier, baseYe
         <p className="mt-3 text-xs text-white/60">
           {scan.placeholder && <strong className="text-mustard">Placeholder scan. </strong>}
           {scan.credit || 'Scan source not recorded.'}
-          {scan.sourceUrl && (
+          {(page.sourceUrl ?? scan.sourceUrl) && (
             <>
               {' '}
-              <a href={scan.sourceUrl} target="_blank" rel="noreferrer" className="underline hover:text-white">
+              <a
+                href={page.sourceUrl ?? scan.sourceUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="underline hover:text-white"
+              >
                 View source
               </a>
             </>

@@ -26,6 +26,8 @@ export interface ScanPage {
   fallbackSrc?: string
   width: number
   height: number
+  /** Catalogue page for this particular scan, when the host has one. */
+  sourceUrl?: string
 }
 
 export interface Restaurant {

@@ -55,6 +55,10 @@ USER_AGENT = "chicago-menu-time-machine-pipeline/0.1 (historical menu research s
 IMAGE_WIDTH = 1000  # px. Never request /full/max/: be gentle with NYPL's image server.
 IIIF_URL = "https://iiif.nypl.org/iiif/3/{image_id}/full/{width},/0/default.jpg"
 FALLBACK_URL = "https://images.nypl.org/index.php?id={image_id}&t=w"
+# The menus.nypl.org site the dataset came from has been retired (its menu pages
+# return 404), so "view source" links go to the page's record in NYPL Digital
+# Collections, using the uuid column of MenuPage.csv.
+ITEM_URL = "https://digitalcollections.nypl.org/items/{uuid}"
 NYPL_PAUSE = 0.5  # seconds between requests to NYPL
 NOMINATIM_PAUSE = 1.1  # Nominatim's usage policy: at most one request per second
 LOOP = (41.8781, -87.6298)
@@ -265,6 +269,7 @@ def build_entry(menu: dict, pages: list[dict], items: list[dict], dish_names: di
                 "fallbackSrc": FALLBACK_URL.format(image_id=page["image_id"]),
                 "width": width,
                 "height": height,
+                **({"sourceUrl": ITEM_URL.format(uuid=page["uuid"])} if page.get("uuid") else {}),
             })
     if not dishes:
         return None
@@ -310,7 +315,7 @@ def build_entry(menu: dict, pages: list[dict], items: list[dict], dish_names: di
             "placeholder": False,
             "credit": "New York Public Library, Rare Book Division, via the What's on the Menu? project. "
                       "Transcribed by volunteers.",
-            "sourceUrl": f"https://menus.nypl.org/menus/{menu['id']}",
+            "sourceUrl": first.get("sourceUrl", "https://www.nypl.org/research/support/whats-on-the-menu"),
             "license": "Transcription data: CC0. Image served by NYPL.",
         },
         "pages": used_pages,
