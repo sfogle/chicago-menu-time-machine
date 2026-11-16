@@ -22,6 +22,8 @@ import re
 import sys
 from pathlib import Path
 
+from venues import railroad_key, venue_key
+
 DEFAULT_MENUS = Path(__file__).resolve().parent.parent / "frontend" / "public" / "data" / "menus.json"
 
 # Matching order: a dish goes to the first category whose pattern matches its
@@ -135,6 +137,9 @@ def sort_menu(dishes: list[dict]) -> list[dict]:
 
 def clean_entry(entry: dict) -> tuple[int, int]:
     """Clean one restaurant entry in place. Returns (dishes kept, dishes dropped)."""
+    if not entry.get("venue"):
+        entry["venue"] = (railroad_key(entry["name"]) or venue_key(entry["name"])
+                          or re.sub(r"[^a-z0-9]+", "-", entry["name"].lower()).strip("-"))
     kept, seen = [], set()
     for dish in entry.get("menu", []):
         name = clean_name(dish.get("name", ""))

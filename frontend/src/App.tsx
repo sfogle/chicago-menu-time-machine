@@ -63,10 +63,32 @@ export default function App() {
 
   const miles = useCallback((r: Restaurant) => milesBetween(where.point, r), [where])
 
+  // A venue can have menus from several years (the Congress Hotel has 1907,
+  // 1908 and 1912). Show one card per venue: the menu closest to the selected
+  // year, with the others offered as year links on the card.
+  const { current, otherYears } = useMemo(() => {
+    const groups = new Map<string, Restaurant[]>()
+    for (const r of all) {
+      const key = r.venue ?? `${r.name}|${r.lat}|${r.lng}`
+      groups.set(key, [...(groups.get(key) ?? []), r])
+    }
+    const current: Restaurant[] = []
+    const otherYears = new Map<string, number[]>()
+    for (const menus of groups.values()) {
+      const pick = [...menus].sort((a, b) => Math.abs(a.year - year) - Math.abs(b.year - year) || a.year - b.year)[0]
+      current.push(pick)
+      otherYears.set(
+        pick.id,
+        [...new Set(menus.filter((m) => m.year !== pick.year).map((m) => m.year))].sort((a, b) => a - b),
+      )
+    }
+    return { current, otherYears }
+  }, [all, year])
+
   const { openNow, nearby } = useMemo(() => {
     const byDistance = (a: Restaurant, b: Restaurant) => miles(a) - miles(b)
-    const openNow = all.filter((r) => eraNote(r, year).open).sort(byDistance)
-    const nearby = all
+    const openNow = current.filter((r) => eraNote(r, year).open).sort(byDistance)
+    const nearby = current
       .filter((r) => {
         if (eraNote(r, year).open) return false
         const gap = year < r.opened ? r.opened - year : year - (r.closed ?? year)
@@ -74,7 +96,7 @@ export default function App() {
       })
       .sort(byDistance)
     return { openNow, nearby }
-  }, [all, year, miles])
+  }, [current, year, miles])
 
   const onMap = useMemo(() => [...openNow, ...nearby], [openNow, nearby])
   const openIds = useMemo(() => new Set(openNow.map((r) => r.id)), [openNow])
@@ -267,6 +289,8 @@ export default function App() {
                     miles={miles(r)}
                     active={open?.restaurant.id === r.id}
                     onOpen={() => setOpen({ restaurant: r, dishId: null })}
+                    otherYears={otherYears.get(r.id) ?? []}
+                    onYear={setYear}
                   />
                 ))}
                 {nearby.length > 0 && (
@@ -280,6 +304,8 @@ export default function App() {
                         miles={miles(r)}
                         active={open?.restaurant.id === r.id}
                         onOpen={() => setOpen({ restaurant: r, dishId: null })}
+                        otherYears={otherYears.get(r.id) ?? []}
+                        onYear={setYear}
                       />
                     ))}
                   </>

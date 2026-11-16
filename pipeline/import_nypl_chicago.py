@@ -294,6 +294,8 @@ def build_entry(menu: dict, pages: list[dict], items: list[dict], dish_names: di
     first = used_pages[0]
     return {
         "id": f"nypl-{menu['id']}",
+        # shared by every menu of the same place, so the app can show one card per venue
+        "venue": rail or venue_key(name) or re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-"),
         "name": display,
         "year": year,
         "opened": known.get("opened", year),

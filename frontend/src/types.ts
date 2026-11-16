@@ -32,6 +32,8 @@ export interface ScanPage {
 
 export interface Restaurant {
   id: string
+  /** Shared by every menu of the same place (a hotel may have menus from several years). */
+  venue?: string
   name: string
   /** Year the menu was printed. Prices are in this year's dollars. */
   year: number

@@ -31,10 +31,13 @@ interface Props {
   year: number
   miles: number
   active: boolean
+  /** years of this venue's other menus, if it has more than one */
+  otherYears: number[]
+  onYear: (year: number) => void
   onOpen: () => void
 }
 
-export default function RestaurantCard({ restaurant: r, year, miles, active, onOpen }: Props) {
+export default function RestaurantCard({ restaurant: r, year, miles, active, otherYears, onYear, onOpen }: Props) {
   const era = eraNote(r, year)
   const standing = STANDING_STYLE[r.stillStanding.status] ?? STANDING_STYLE.unknown
   const gap = r.year - year
@@ -77,6 +80,22 @@ export default function RestaurantCard({ restaurant: r, year, miles, active, onO
           </div>
         </div>
       </button>
+      {otherYears.length > 0 && (
+        <div className="flex flex-wrap items-center gap-1.5 border-t border-rule px-3 py-2 text-xs sm:px-4">
+          <span className="font-bold text-muted">Other menus from here:</span>
+          {otherYears.map((y) => (
+            <button
+              key={y}
+              type="button"
+              onClick={() => onYear(y)}
+              aria-label={`Jump to ${y} to see the ${y} menu`}
+              className="rounded-full border border-ink/40 px-2 py-0.5 font-mono font-bold hover:bg-mustard"
+            >
+              {y}
+            </button>
+          ))}
+        </div>
+      )}
       <div className={`flex items-start gap-2 border-t-2 border-dashed px-3 py-2 text-sm sm:px-4 ${standing.cls}`}>
         <span aria-hidden="true">{standing.icon}</span>
         <p>
