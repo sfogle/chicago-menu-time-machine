@@ -336,8 +336,8 @@ export default function App() {
         )}
 
         <footer className="mt-10 border-t border-rule pt-4 text-xs text-muted">
-          Menus are from the New York Public Library’s volunteer-transcribed “What’s on the Menu?” dataset, plus a
-          few machine-read Internet Archive scans. Scan images load from those libraries’ servers when you open a
+          Menus are from the New York Public Library’s volunteer-transcribed “What’s on the Menu?” dataset, the
+          Culinary Institute of America’s menu collection, and a few machine-read Internet Archive scans. Scan images load from those libraries’ servers when you open a
           dish. Railroad dining cars are pinned at their Chicago terminal. Inflation uses national CPI-U; tax rates
           are approximate. Map data © OpenStreetMap contributors.
         </footer>

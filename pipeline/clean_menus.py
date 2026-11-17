@@ -149,10 +149,11 @@ def clean_entry(entry: dict) -> tuple[int, int]:
         seen.add(key)
         dish["name"] = name
         dish["description"] = clean_name(dish.get("description", ""))
-        dish["category"] = categorize(name)
+        # CIA entries carry the menu's own section headings; keep those
+        dish["category"] = dish["category"] if entry.get("source") == "cia" and dish.get("category") else categorize(name)
         kept.append(dish)
     dropped = len(entry.get("menu", [])) - len(kept)
-    entry["menu"] = sort_menu(kept)
+    entry["menu"] = kept if entry.get("source") == "cia" else sort_menu(kept)
     return len(kept), dropped
 
 

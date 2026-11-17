@@ -12,6 +12,7 @@ frontend/                     Vite + React + TypeScript + Tailwind + Leaflet
 pipeline/
   import_nypl_chicago.py        build menus.json from NYPL's transcribed dataset (no OCR)
   nypl_colab.ipynb              the same importer, ready to run on Google Colab
+  import_cia_chicago.py         add menus from the Culinary Institute of America collection
   clean_menus.py                dish-name cleanup and category rules
   venues.py                     hand-entered facts about known venues
   ocr_menu.py                   OCR one scan and add it to menus.json
@@ -23,7 +24,8 @@ pipeline/
 ```
 
 No scan images live in this repository. `menus.json` stores image URLs and the
-app loads each scan from its host (NYPL or the Internet Archive) the first time
+app loads each scan from its host (NYPL, the Culinary Institute of America or
+the Internet Archive) the first time
 a visitor opens a dish on that menu.
 
 ## Run the app
@@ -41,8 +43,10 @@ type-checks and writes the production site to `frontend/dist`.
 
 **36 menus** come from the New York Public Library's
 [What's on the Menu?](https://www.nypl.org/research/support/whats-on-the-menu) open dataset: dishes and prices
-transcribed by volunteers, so there is no OCR involved. **5 more** are
-Internet Archive hotel menus (1907-1912) read by OCR.
+transcribed by volunteers, so there is no OCR involved. **7 menus** come from
+the [Culinary Institute of America menu collection](https://cdm16940.contentdm.oclc.org/digital/collection/p16940coll1),
+transcribed by its library; they cover the two decades NYPL has nothing for.
+**5 more** are Internet Archive hotel menus (1907-1912) read by OCR.
 
 | Decade | Menus | What they are |
 | --- | --- | --- |
@@ -50,12 +54,12 @@ Internet Archive hotel menus (1907-1912) read by OCR.
 | 1900s | 17 | restaurants, hotels and clubs: the dataset's richest decade for Chicago |
 | 1910s | 5 | four OCR'd hotel menus, one NYPL dining car |
 | 1920s | 2 | railroad dining cars only |
-| 1930s | 0 | nothing usable in the dataset |
+| 1930s | 4 | CIA: Blue Ribbon Spa (bar), Palmer House Coffee Shop, Green Shutters, Congress Hotel |
 | 1940s | 5 | Cape Cod Room, Palmer House, Henrici's, two dining cars |
 | 1950s | 4 | Fritzel's, The Drake, Henrici's, Red Star Inn |
 | 1960s | 2 | Red Star Inn, Don the Beachcomber |
 | 1970s | 2 | Stock Yard Inn, Sheraton-Blackstone |
-| 1980s | 0 | nothing usable in the dataset |
+| 1980s | 3 | CIA: University Club, Standard India Restaurant, Sayat Nova |
 
 Things to know about this data:
 
@@ -75,6 +79,14 @@ Things to know about this data:
   "still standing?" notes in `venues.py` are from general knowledge and should
   be checked. Chicago renumbered its streets in 1909, so pins for older
   numbered addresses are approximate.
+- **CIA menus are placed by matching, and their rights are unreviewed.** The
+  CIA transcripts give text but no positions, so the importer OCRs each page
+  only to find where each transcribed dish sits; a few dishes have no
+  highlight. The CIA marks these records "Copyright Not Evaluated", and the
+  1980s menus are probably still in copyright, so the app links to the CIA's
+  hosted image and never copies it. The 1934 Blue Ribbon Spa date is the
+  copyright year printed on the menu; that venue has no address on record and
+  is pinned at the centre of the Loop.
 - **Categories are assigned by keyword** (`clean_menus.py`), since the dataset
   has none. Expect the odd dish in the wrong section.
 - **Some later scans load at a smaller size.** NYPL refuses the 1000px image
@@ -103,6 +115,26 @@ run the cells; the last one downloads the finished `menus.json`.
 Being polite to NYPL: images are requested at 1000px wide, never full size;
 `--validate-images` sends HEAD requests only, two a second, and caches the
 answers; the app never preloads scans and fetches each page image once.
+
+## Add menus from the Culinary Institute of America
+
+```bash
+cd pipeline
+python3 import_cia_chicago.py --dry-run             # show what would be imported
+python3 import_cia_chicago.py                       # 1930s and 1980s (the default)
+python3 import_cia_chicago.py --decades 1940s 1950s # other decades
+```
+
+It asks the CIA's CONTENTdm server for records whose city is Chicago in each
+decade, reads every page's transcript and turns priced lines into dishes,
+keeping the menu's own section headings. Standard library only. If the
+`tesseract` program is installed it also places a highlight box for each dish;
+`--no-locate` skips that. It replaces the `cia-*` entries for the decades you
+name and leaves everything else alone.
+
+Being polite to the CIA: one request a second, every answer cached in the
+gitignored `pipeline/cia_data/`, and images requested at most 1600px on the
+long side (double-page spreads are unreadable below that).
 
 ## Add a menu that nobody has transcribed
 

@@ -10,3 +10,6 @@ pipeline/raw_scans/
 
 # NYPL bulk dataset cache (see pipeline/import_nypl_chicago.py)
 pipeline/nypl_data/
+
+# CIA menu collection cache (see pipeline/import_cia_chicago.py)
+pipeline/cia_data/
