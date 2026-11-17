@@ -64,6 +64,17 @@ PRICE_INLINE = re.compile(rf"(?<=\s)({PRICE})(?:\s?-\s?{PRICE})?(?=\s|$)")
 NOT_A_DISH = re.compile(r"\b(extra|additional|minimum|phone|call|telephone|served from|a\.m\.|p\.m\.|calories|"
                         r"copyright|chicago, il|served for)", re.IGNORECASE)
 SIZE_WORD = re.compile(r"^(small|large|half|double|glass|bottle|each|cold|per person)$", re.IGNORECASE)
+# what is left when a spirit list's age or strength column is read as a dish: "Yr. old", "8 Yrs.", "Proof"
+MEASURE_ONLY = re.compile(r"^[\d\s./-]*(yrs?|years?|proof|oz|ounces?|bottle|glass|split|fifth|pint|quart|"
+                          r"carafe|cup|pot|per|old|each|\W)*[\s.]*$", re.IGNORECASE)
+# a section heading that is really the start of a sentence or a note
+HEADING_JUNK = re.compile(r"\b(for|of|a|an|the|with|and|or|by|to|from|served|reservations?|only|suggest)\s*:?$|"
+                          r"^(with|and|or|choice of|reservations?)\b|\d", re.IGNORECASE)
+CONNECTOR = re.compile(r"^(with|and|or|w/)\s+", re.IGNORECASE)
+# short names whose noun is in the section heading: "Club" under "Sandwiches" is a club sandwich
+HEADING_NOUN = {"sandwiches": "Sandwich", "sandwich": "Sandwich", "fizzes": "Fizz", "flips": "Flip",
+                "salads": "Salad", "pies": "Pie", "sundaes": "Sundae", "sherbets": "Sherbet", "cheese": "Cheese",
+                "cheeses": "Cheese", "juices": "Juice", "cakes": "Cake", "soups": "Soup", "cocktails": "Cocktail"}
 
 
 def get_json(url: str, cache_name: str):
@@ -125,7 +136,39 @@ def split_cells(line: str) -> list[tuple[str, str | None]]:
 def is_heading(line: str, before_blank: bool, after: str) -> bool:
     words = line.split()
     return (before_blank and bool(after.strip()) and len(words) <= 4 and not re.search(r"\d", line)
-            and not line.rstrip().endswith((",", ".")) and len(line) >= 4 and not NOT_A_DISH.search(line))
+            and not line.rstrip().endswith((",", ".")) and len(line) >= 4 and not NOT_A_DISH.search(line)
+            and not HEADING_JUNK.search(line.strip()))
+
+
+def heading_text(line: str) -> str:
+    """'COCKTAILS and MIXED DRINKS' -> 'Cocktails and Mixed Drinks'; 'Side Orders:' -> 'Side Orders'."""
+    line = line.strip().rstrip(":").strip()
+    if any(len(w) > 3 and w.isupper() for w in line.split()):
+        line = title_case(line)
+    return line
+
+
+def tidy_name(name: str, heading: str | None) -> tuple[str, str]:
+    """Fix the common transcript slips in a dish name. Returns (name, text moved to the description)."""
+    name = name.replace("_", " ")
+    name = re.sub(r"^#\d+\s*", "", name)                       # wine-list bin numbers: "#101 Cliquot"
+    name = re.sub(r"^(\d+\s*)?oz\.?\s+", "", name, flags=re.IGNORECASE)  # "6 Oz. Buffalo-Burger", number lost
+    name = re.sub(r"\s+\.?\d{1,3}(\.\d{2})?\s*;.*$", "", name)  # "Omelette, plain 75; with herbs 80; ..."
+    name = re.sub(r"[\s,;-]+\d+\s*oz\.?\b.*$", "", name, flags=re.IGNORECASE)  # "Martini (Gordon) 2 oz"
+    name = re.sub(r"[\s,.-]+(per\s+)?bottle$", "", name, flags=re.IGNORECASE)  # "Beer, Bottle"
+    moved = ""
+    if len(name) > 55:
+        # the menu's line ran a dish and its garnishes together: keep the dish as the name
+        cut = re.search(r"(,|\s-\s|:)\s+", name[8:])
+        if cut:
+            at = 8 + cut.start()
+            name, moved = name[:at].strip(), name[8 + cut.end():].strip()
+    words = name.split()
+    noun = HEADING_NOUN.get((heading or "").split()[-1].lower()) if heading else None
+    if noun and len(words) <= 2 and noun.lower() not in name.lower() and not name.lower().endswith("s") \
+            and "burger" not in name.lower():
+        name = f"{name} {noun}"
+    return name.strip(" ,;-"), moved
 
 
 def parse_transcript(text: str, year: int) -> list[dict]:
@@ -139,9 +182,25 @@ def parse_transcript(text: str, year: int) -> list[dict]:
     def add(name: str, price_token: str, description: str = "") -> dict | None:
         name = clean_name(re.sub(r"^\d+\.\s*", "", name))
         price = to_price(price_token, year)
-        if price is None or not looks_like_dish(name) or SIZE_WORD.match(name) or NOT_A_DISH.search(name):
+        if price is None or MEASURE_ONLY.match(name):
             return None
-        dish = {"name": name, "description": clean_name(description)[:160], "heading": heading, "price": price}
+        printed = name  # as it appears on the page, for finding it on the scan
+        connector = CONNECTOR.match(name)
+        if connector:
+            # "Omelette, plain .75 / With cheese .85": a variant of the dish above it
+            base = dishes[-1]["name"] if dishes and dishes[-1]["heading"] == heading else None
+            if not base:
+                return None
+            base = re.sub(r",\s*(plain|natural|regular)$", "", base, flags=re.IGNORECASE)
+            name = f"{base} {name[0].lower()}{name[1:]}"
+        name, moved = tidy_name(name, heading)
+        name = clean_name(name)
+        if (not looks_like_dish(name) or SIZE_WORD.match(name) or NOT_A_DISH.search(name) or MEASURE_ONLY.match(name)
+                or re.fullmatch(r"[\w.-]+'s", name)):  # "America's": the first word of a heading, not a dish
+            return None
+        description = " ".join(x for x in (moved, description) if x)
+        dish = {"name": name, "description": clean_name(description)[:160], "heading": heading, "price": price,
+                "printed": printed}
         dishes.append(dish)
         return dish
 
@@ -162,7 +221,7 @@ def parse_transcript(text: str, year: int) -> list[dict]:
         cells = split_cells(stripped)
         if cells[0][1] is None:  # no price on this line
             if is_heading(stripped, before_blank, after):
-                previous_heading, heading = heading, title_case(stripped) if stripped.isupper() else stripped
+                previous_heading, heading = heading, heading_text(title_case(stripped) if stripped.isupper() else stripped)
                 pending, last = [stripped], None
             elif last is not None and not pending and not stripped.endswith(","):
                 if len(last["description"]) < 160:
@@ -183,7 +242,10 @@ def parse_transcript(text: str, year: int) -> list[dict]:
             close_block(pending, cells[0][1], cells[0][0])  # the price ends the last line of the description
             pending, last = [], None
             continue
-        prefix = " ".join(pending[-1:]) if pending and stripped[0].islower() else ""  # name wrapped onto two lines
+        # a name wrapped onto two lines; never glue the section heading onto the first dish under it
+        wrapped = pending and stripped[0].islower() and heading_text(pending[-1]) != heading \
+            and title_case(pending[-1]) != heading
+        prefix = pending[-1] if wrapped else ""
         for n, (cell_text, token) in enumerate(cells):
             last = add(f"{prefix} {cell_text}" if n == 0 and prefix else cell_text, token) or last
         if len(cells) > 1:
@@ -312,7 +374,11 @@ def build_entry(record: dict, max_dishes: int, do_locate: bool, geo_cache: dict,
                 "price": dish["price"],
                 "page": page_index,
             }
-            box = find_on_page(dish["name"], lines, claimed) if lines else None
+            box = None
+            if lines:
+                box = find_on_page(dish["printed"], lines, claimed)
+                if box is None and dish["printed"] != dish["name"]:
+                    box = find_on_page(dish["name"], lines, claimed)
             if box:
                 entry["bbox"] = box
             dishes.append(entry)

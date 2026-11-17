@@ -83,8 +83,10 @@ Things to know about this data:
 - **CIA menus are placed by matching, and their rights are unreviewed.** The
   CIA transcripts give text but no positions, so the importer OCRs each page
   only to find where each transcribed dish sits; about one dish in ten has no
-  highlight. Transcripts of busy menus (wine and spirit lists, multi-column
-  spreads) parse imperfectly: expect some odd dish names and section headings.
+  highlight. The importer repairs the common transcript slips (spirit-list
+  age and strength columns read as dishes, "With cheese" lines that are
+  variants of the dish above, headings run into the first dish, garnishes run
+  into the name), but busy menus still produce the odd stray line.
   Where a venue has several menus from one year, only the fullest is kept.
   Thirteen lesser-known venues have no address on record and share a pin at
   the centre of the Loop. The CIA marks these records "Copyright Not Evaluated", and the
