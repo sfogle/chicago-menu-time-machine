@@ -157,6 +157,15 @@ KNOWN_VENUES: dict[str, dict] = {
         "blurb": "A club for college men, founded in 1887.",
         "status": "open", "label": "Club still active", "today": "The club is at 76 E Monroe St, a 1909 building; earlier menus came from a previous clubhouse.",
     },
+    # No menu found yet in any source. Facts from the present occupant's own history page
+    # (exchequerpub.com/history): the 226 Club in the 1920s, the Wonder Bar in the 1930s-40s,
+    # Brown's from the 1950s until early 1969, the Exchequer Pub since September 1969.
+    "brown's": {
+        "name": "Brown's", "address": "226 S Wabash Ave", "lat": 41.8788, "lng": -87.6261,
+        "closed": 1969, "cuisine": "Carvery & Sandwiches", "emoji": "🥪",
+        "blurb": "A casual Loop spot with a steam table up front, hand-carved sandwiches and peanut shells on the floor.",
+        "status": "open", "label": "Still a restaurant", "today": "Exchequer Restaurant & Pub, in the same ground-floor space since 1969.",
+    },
     "hamilton club": {
         "name": "Hamilton Club of Chicago", "address": "The Loop", "lat": 41.8812, "lng": -87.6296,
         "cuisine": "Private Club", "emoji": "🎩",
@@ -168,6 +177,97 @@ KNOWN_VENUES: dict[str, dict] = {
         "cuisine": "Polynesian / Tiki", "emoji": "🗿",
         "blurb": "The Chicago outpost of the original tiki bar, all rum drinks and Cantonese dishes under thatch.",
         "status": "gone", "label": "Closed", "today": "The Gold Coast block has been redeveloped. Closing date not verified.",
+    },
+    # --- added for the CIA importer: its records often carry no street address ---
+    "union station": {
+        "name": "Fred Harvey, Union Station", "address": "Union Station, Canal St & Adams St", "lat": 41.8787, "lng": -87.6403,
+        "cuisine": "Railroad Station Restaurant", "emoji": "🚉",
+        "blurb": "Fred Harvey's restaurant for travellers in Union Station.",
+        "status": "open", "label": "Station in use", "today": "Chicago Union Station is still the city's main rail terminal.",
+    },
+    "o'hare field": {
+        "name": "Marshall Field's, O'Hare Field Restaurant", "address": "O'Hare International Airport", "lat": 41.9786, "lng": -87.9048,
+        "cuisine": "Airport Restaurant", "emoji": "✈️",
+        "blurb": "The department store's restaurant at the new jet-age airport.",
+        "status": "unknown", "label": "Not yet researched", "today": "The airport has been rebuilt many times since; the restaurant is long gone.",
+    },
+    "marshall field": {
+        "name": "Marshall Field's", "address": "111 N State St", "lat": 41.8837, "lng": -87.6272,
+        "opened": 1907, "closed": 2006, "cuisine": "Department Store Dining", "emoji": "🛍️",
+        "blurb": "Lunch and afternoon tea in the State Street department store.",
+        "status": "open", "label": "Building survives", "today": "The State Street store is now Macy's; the Walnut Room still serves lunch.",
+    },
+    "kungsholm": {
+        "name": "Kungsholm", "address": "100 E Ontario St", "lat": 41.8934, "lng": -87.6252,
+        "cuisine": "Scandinavian Smörgåsbord", "emoji": "🇸🇪",
+        "blurb": "A Swedish smörgåsbord in a Near North mansion, known for its miniature puppet opera.",
+        "status": "open", "label": "Building survives", "today": "The mansion at Rush and Ontario still stands and has housed other restaurants.",
+    },
+    "auditorium hotel": {
+        "name": "Auditorium Hotel", "address": "430 S Michigan Ave", "lat": 41.876, "lng": -87.6247,
+        "cuisine": "Hotel Dining Room", "emoji": "🏨",
+        "blurb": "The hotel half of Adler and Sullivan's Auditorium Building.",
+        "status": "open", "label": "Building survives", "today": "The Auditorium Building, home of Roosevelt University and the Auditorium Theatre.",
+    },
+    "morrison hotel": {
+        "name": "Morrison Hotel", "address": "Madison St & Clark St", "lat": 41.882, "lng": -87.631,
+        "cuisine": "Hotel Coffee Shop", "emoji": "🏨",
+        "blurb": "A Loop hotel tower that was once among the tallest hotels anywhere.",
+        "status": "gone", "label": "Demolished", "today": "Demolished in 1965; a bank tower stands on the block.",
+    },
+    "stevens hotel": {
+        "name": "The Stevens Hotel", "address": "720 S Michigan Ave", "lat": 41.8727, "lng": -87.6243,
+        "opened": 1927, "closed": None, "cuisine": "Hotel Dining Room", "emoji": "🏨",
+        "blurb": "Opened in 1927 as the largest hotel in the world.",
+        "status": "open", "label": "Still standing", "today": "Hilton Chicago, in the same building.",
+    },
+    "blackhawk": {
+        "name": "The Blackhawk", "address": "139 N Wabash Ave", "lat": 41.8843, "lng": -87.6262,
+        "opened": 1920, "closed": 1984, "cuisine": "Steaks & Prime Rib", "emoji": "🥩",
+        "blurb": "A Loop institution since 1920, famous for big-band broadcasts and later its spinning salad bowl.",
+        "status": "unknown", "label": "Restaurant closed", "today": "The Wabash Avenue restaurant closed in 1984.",
+    },
+    "trianon": {
+        "name": "Trianon Ballroom", "address": "6201 S Cottage Grove Ave", "lat": 41.7818, "lng": -87.6062,
+        "cuisine": "Ballroom Supper Menu", "emoji": "💃",
+        "blurb": "A vast South Side dance palace in Woodlawn.",
+        "status": "gone", "label": "Demolished", "today": "The ballroom was torn down in the 1960s.",
+    },
+    "wrigley building": {
+        "name": "Wrigley Building Restaurant", "address": "410 N Michigan Ave", "lat": 41.8896, "lng": -87.6247,
+        "cuisine": "Business Lunch & Dinner", "emoji": "🏢",
+        "blurb": "The advertising crowd's dining room at the foot of the Magnificent Mile.",
+        "status": "open", "label": "Building survives", "today": "The Wrigley Building still stands; the restaurant is gone.",
+    },
+    "edgewater beach": {
+        "name": "Edgewater Beach Hotel", "address": "5349 N Sheridan Rd", "lat": 41.9795, "lng": -87.6549,
+        "opened": 1916, "closed": 1967, "cuisine": "Resort Hotel Dining", "emoji": "🏖️",
+        "blurb": "A pink resort hotel on the lakefront, with dancing on the Beach Walk.",
+        "status": "gone", "label": "Demolished", "today": "The hotel closed in 1967 and was demolished; only the pink apartment building remains.",
+    },
+    "pump room": {
+        "name": "The Pump Room, Ambassador East", "address": "1301 N State Pkwy", "lat": 41.9063, "lng": -87.6287,
+        "opened": 1938, "closed": None, "cuisine": "Celebrity Supper Club", "emoji": "🥂",
+        "blurb": "Booth One was where visiting film stars were seated to be seen.",
+        "status": "open", "label": "Hotel still standing", "today": "The Ambassador hotel building still operates; the room has been reinvented several times.",
+    },
+    "cafe bohemia": {
+        "name": "Cafe Bohemia", "address": "138 S Clinton St", "lat": 41.8796, "lng": -87.641,
+        "cuisine": "Wild Game", "emoji": "🦌",
+        "blurb": "A West Loop game restaurant near Union Station: venison, bear, buffalo.",
+        "status": "unknown", "label": "Not yet researched", "today": "Nobody has checked what stands at this address today.",
+    },
+    "london house": {
+        "name": "London House", "address": "360 N Michigan Ave", "lat": 41.888, "lng": -87.6247,
+        "cuisine": "Steaks & Jazz", "emoji": "🎹",
+        "blurb": "A steakhouse and jazz room in the London Guarantee Building.",
+        "status": "open", "label": "Building survives", "today": "The London Guarantee Building is now the LondonHouse hotel.",
+    },
+    "berghoff": {
+        "name": "The Berghoff", "address": "17 W Adams St", "lat": 41.8793, "lng": -87.6285,
+        "opened": 1898, "closed": None, "cuisine": "German", "emoji": "🍺",
+        "blurb": "German cooking and the house beer on Adams Street since 1898.",
+        "status": "open", "label": "Still open", "today": "The Berghoff, same address.",
     },
     "fred harvey": {
         "name": "Fred Harvey, Dearborn Station", "address": "Polk St & Dearborn St", "lat": 41.8722, "lng": -87.6292,

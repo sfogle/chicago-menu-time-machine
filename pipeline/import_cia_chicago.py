@@ -197,9 +197,12 @@ def parse_transcript(text: str, year: int) -> list[dict]:
 # ---------------------------------------------------------------------------
 def ocr_words(image: Path) -> list[list[dict]]:
     """Words on the page grouped into text lines, via the tesseract program."""
-    out = subprocess.run(["tesseract", str(image), "-", "--psm", "11", "tsv"], capture_output=True, text=True, check=True)
+    cache = image.with_suffix(".tsv")
+    if not cache.exists():
+        run = subprocess.run(["tesseract", str(image), "-", "--psm", "11", "tsv"], capture_output=True, text=True, check=True)
+        cache.write_text(run.stdout)
     lines: dict[tuple, list[dict]] = {}
-    for row in csv.DictReader(io.StringIO(out.stdout), delimiter="\t", quoting=csv.QUOTE_NONE):
+    for row in csv.DictReader(io.StringIO(cache.read_text()), delimiter="\t", quoting=csv.QUOTE_NONE):
         word = (row.get("text") or "").strip()
         if not word or float(row["conf"]) < 20:
             continue
@@ -270,10 +273,15 @@ def build_entry(record: dict, max_dishes: int, do_locate: bool, geo_cache: dict,
     if EVENT_SKIP.search(title):
         return None
 
-    raw_name = re.sub(r"\s*\(.*$", "", meta.get("restau", "").split(";")[0]).strip() or title.split(",")[0]
+    restau = meta.get("restau", "").split(";")[0]
+    raw_name = re.sub(r"\s*\(.*$", "", restau).strip() or title.split(",")[0]
+    # "Coffee Shop (Palmer House : Chicago, Ill.)" is a room inside a larger house: say which
+    house = re.search(r"\(([^:()]+?)\s*:\s*Chicago", restau)
+    if house and house.group(1).strip().lower() not in {"restaurant", "resaurant", "firm", "hotel", "club", "bar"}:
+        raw_name = f"{raw_name}, {house.group(1).strip()}"
     key = venue_key(f"{raw_name} {meta.get('restau', '')} {title}")
     known = KNOWN_VENUES.get(key or "", {})
-    name = known.get("name", raw_name)
+    name = raw_name if house else known.get("name", raw_name)
 
     used_pages, dishes, seen = [], [], set()
     for page in pages:
@@ -398,14 +406,27 @@ def main() -> int:
                 print(f"  skip {entry['id']} ({entry['name']}): only {len(entry['menu'])} priced dishes", file=sys.stderr)
     geo_path.write_text(json.dumps(geo_cache, indent=1))
 
+    # One menu per venue and year: the app shows a venue's menus by year, so a
+    # second menu of the same year could never be reached. Keep the fullest,
+    # and give way to a menu another source already has for that venue and year.
+    doc = json.loads(args.menus.read_text())
+    decades = {int(d[:4]) for d in args.decades}
+    kept_others = [r for r in doc["restaurants"]
+                   if not (r.get("source") == "cia" and r["year"] // 10 * 10 in decades)]
+    taken = {(r.get("venue"), r["year"]) for r in kept_others}
+    unique: dict[tuple, dict] = {}
+    for entry in sorted(entries, key=lambda e: -len(e["menu"])):
+        slot = (entry["venue"], entry["year"])
+        if slot in taken or slot in unique:
+            print(f"  drop {entry['id']} ({entry['year']} {entry['name']}): that venue and year is already covered",
+                  file=sys.stderr)
+            continue
+        unique[slot] = entry
+    entries = list(unique.values())
+
     if args.dry_run:
         return 0
-    doc = json.loads(args.menus.read_text())
-    replaced = {e["id"] for e in entries}
-    decades = {int(d[:4]) for d in args.decades}
-    doc["restaurants"] = [r for r in doc["restaurants"]
-                          if r["id"] not in replaced
-                          and not (r.get("source") == "cia" and r["year"] // 10 * 10 in decades)] + entries
+    doc["restaurants"] = kept_others + entries
     doc["restaurants"].sort(key=lambda r: (r["year"], r["name"]))
     args.menus.write_text(json.dumps(doc, ensure_ascii=False, separators=(",", ":")) + "\n")
     print(f"wrote {args.menus}: {len(doc['restaurants'])} menus ({len(entries)} from the CIA)", file=sys.stderr)

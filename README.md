@@ -43,27 +43,28 @@ type-checks and writes the production site to `frontend/dist`.
 
 **36 menus** come from the New York Public Library's
 [What's on the Menu?](https://www.nypl.org/research/support/whats-on-the-menu) open dataset: dishes and prices
-transcribed by volunteers, so there is no OCR involved. **7 menus** come from
+transcribed by volunteers, so there is no OCR involved. **62 menus** come from
 the [Culinary Institute of America menu collection](https://cdm16940.contentdm.oclc.org/digital/collection/p16940coll1),
-transcribed by its library; they cover the two decades NYPL has nothing for.
+transcribed by its library; they run from 1909 to 1983 and cover the two
+decades NYPL has nothing for (1930s, 1980s).
 **5 more** are Internet Archive hotel menus (1907-1912) read by OCR.
 
-| Decade | Menus | What they are |
+| Decade | Menus | From |
 | --- | --- | --- |
-| 1890s | 4 | one restaurant, three railroad menus |
-| 1900s | 17 | restaurants, hotels and clubs: the dataset's richest decade for Chicago |
-| 1910s | 5 | four OCR'd hotel menus, one NYPL dining car |
-| 1920s | 2 | railroad dining cars only |
-| 1930s | 4 | CIA: Blue Ribbon Spa (bar), Palmer House Coffee Shop, Green Shutters, Congress Hotel |
-| 1940s | 5 | Cape Cod Room, Palmer House, Henrici's, two dining cars |
-| 1950s | 4 | Fritzel's, The Drake, Henrici's, Red Star Inn |
-| 1960s | 2 | Red Star Inn, Don the Beachcomber |
-| 1970s | 2 | Stock Yard Inn, Sheraton-Blackstone |
-| 1980s | 3 | CIA: University Club, Standard India Restaurant, Sayat Nova |
+| 1890s | 4 | NYPL 4 |
+| 1900s | 18 | CIA 1, Internet Archive 1, NYPL 16 |
+| 1910s | 6 | CIA 1, Internet Archive 4, NYPL 1 |
+| 1920s | 2 | NYPL 2 |
+| 1930s | 4 | CIA 4 |
+| 1940s | 20 | CIA 15, NYPL 5 |
+| 1950s | 12 | CIA 8, NYPL 4 |
+| 1960s | 16 | CIA 14, NYPL 2 |
+| 1970s | 18 | CIA 16, NYPL 2 |
+| 1980s | 3 | CIA 3 |
 
 Things to know about this data:
 
-- **Railroad dining cars are not restaurants.** Ten entries are dining-car or
+- **Railroad dining cars are not restaurants.** Ten NYPL entries are dining-car or
   station menus of Chicago railroads, pinned at the line's Chicago terminal and
   labelled as such. They are the dataset's only Chicago material for the 1910s
   and 1920s. Leave them out with `--no-dining-cars`.
@@ -81,8 +82,12 @@ Things to know about this data:
   numbered addresses are approximate.
 - **CIA menus are placed by matching, and their rights are unreviewed.** The
   CIA transcripts give text but no positions, so the importer OCRs each page
-  only to find where each transcribed dish sits; a few dishes have no
-  highlight. The CIA marks these records "Copyright Not Evaluated", and the
+  only to find where each transcribed dish sits; about one dish in ten has no
+  highlight. Transcripts of busy menus (wine and spirit lists, multi-column
+  spreads) parse imperfectly: expect some odd dish names and section headings.
+  Where a venue has several menus from one year, only the fullest is kept.
+  Thirteen lesser-known venues have no address on record and share a pin at
+  the centre of the Loop. The CIA marks these records "Copyright Not Evaluated", and the
   1980s menus are probably still in copyright, so the app links to the CIA's
   hosted image and never copies it. The 1934 Blue Ribbon Spa date is the
   copyright year printed on the menu; that venue has no address on record and
@@ -122,7 +127,7 @@ answers; the app never preloads scans and fetches each page image once.
 cd pipeline
 python3 import_cia_chicago.py --dry-run             # show what would be imported
 python3 import_cia_chicago.py                       # 1930s and 1980s (the default)
-python3 import_cia_chicago.py --decades 1940s 1950s # other decades
+python3 import_cia_chicago.py --decades 1900s 1910s 1930s 1940s 1950s 1960s 1970s 1980s   # everything
 ```
 
 It asks the CIA's CONTENTdm server for records whose city is Chicago in each
