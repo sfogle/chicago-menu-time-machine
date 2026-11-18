@@ -465,7 +465,13 @@ def main() -> int:
     if args.menus.exists():
         doc = json.loads(args.menus.read_text())
     others = [r for r in doc.get("restaurants", []) if not r["id"].startswith("nypl-")]
-    doc = {"version": 2, "restaurants": sorted(others + entries, key=lambda r: (r["year"], r["name"]))}
+    # another source's menu for the same venue and year wins (e.g. the OCR'd four-page
+    # Gunther's 1900 from import_nypl_scans.py over the one-page transcription)
+    taken = {(r.get("venue"), r["year"]) for r in others}
+    for entry in [e for e in entries if (e.get("venue"), e["year"]) in taken]:
+        print(f"  skipping {entry['name']} {entry['year']}: menus.json has another menu for it", file=sys.stderr)
+        entries.remove(entry)
+    doc ={"version": 2, "restaurants": sorted(others + entries, key=lambda r: (r["year"], r["name"]))}
     args.menus.parent.mkdir(parents=True, exist_ok=True)
     # compact separators: the file is data, not prose, and this roughly halves it
     args.menus.write_text(json.dumps(doc, ensure_ascii=False, separators=(",", ":")) + "\n")

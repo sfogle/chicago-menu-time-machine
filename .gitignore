@@ -13,3 +13,9 @@ pipeline/nypl_data/
 
 # CIA menu collection cache (see pipeline/import_cia_chicago.py)
 pipeline/cia_data/
+
+# NYPL Digital Collections API token (see pipeline/nypl_api.py) - never commit
+pipeline/.nypl_token
+
+# NYPL Digital Collections API cache (see pipeline/import_nypl_scans.py)
+pipeline/nypl_api_data/

@@ -11,6 +11,8 @@ frontend/                     Vite + React + TypeScript + Tailwind + Leaflet
   public/data/cpi_chicago.json  CPI multipliers, 1890-1985 -> 2026 dollars
 pipeline/
   import_nypl_chicago.py        build menus.json from NYPL's transcribed dataset (no OCR)
+  import_nypl_scans.py          OCR the few NYPL Chicago scans that were never transcribed
+  nypl_api.py                   NYPL Digital Collections API client (needs a free token)
   nypl_colab.ipynb              the same importer, ready to run on Google Colab
   import_cia_chicago.py         add menus from the Culinary Institute of America collection
   clean_menus.py                dish-name cleanup and category rules
@@ -43,9 +45,11 @@ type-checks and writes the production site to `frontend/dist`.
 
 ## Where the menus come from
 
-**36 menus** come from the New York Public Library's
+**35 menus** come from the New York Public Library's
 [What's on the Menu?](https://www.nypl.org/research/support/whats-on-the-menu) open dataset: dishes and prices
-transcribed by volunteers, so there is no OCR involved. **62 menus** come from
+transcribed by volunteers, so there is no OCR involved. A 36th, Gunther's
+1900 "Complete Menu", is an NYPL scan the volunteers never transcribed, read
+by OCR: four priced pages in place of the one-page transcription. **62 menus** come from
 the [Culinary Institute of America menu collection](https://cdm16940.contentdm.oclc.org/digital/collection/p16940coll1),
 transcribed by its library; they run from 1909 to 1983 and cover the two
 decades NYPL has nothing for (1930s, 1980s).
@@ -122,11 +126,33 @@ python3 import_nypl_chicago.py --validate-images  # write menus.json
 It downloads NYPL's bulk CSV archive (37 MB, cached in the gitignored
 `pipeline/nypl_data/`), joins `Menu`, `MenuPage`, `MenuItem` and `Dish`, and
 replaces every `nypl-*` entry in `menus.json`. Entries from other sources are
-left alone. Useful flags: `--max-menus`, `--per-venue`, `--max-dishes`,
+left alone, and an NYPL menu is skipped when another source already has that
+venue and year. Useful flags: `--max-menus`, `--per-venue`, `--max-dishes`,
 `--no-dining-cars`, `--check-latest` (look on nypl.org for a newer archive).
 
 To run it on Google Colab instead, open `pipeline/nypl_colab.ipynb` there and
 run the cells; the last one downloads the finished `menus.json`.
+
+### NYPL scans nobody transcribed
+
+Nearly every Chicago menu NYPL has scanned is already in the transcribed
+dataset. Checked against the Digital Collections API in November 2026, only 16
+of 1,207 Chicago menu page scans were missing, from three menus. Of those, the
+1893 World's Fair clam bake menu is too faint to OCR, and the University Club
+menu is a banquet. `import_nypl_scans.py` OCRs the one worth having, Gunther's
+1900 (166 dishes on four pages), and replaces the transcribed Gunther's 1900:
+
+```bash
+cd pipeline
+.venv/bin/python import_nypl_scans.py --dry-run
+.venv/bin/python import_nypl_scans.py && python3 clean_menus.py --only ocr
+```
+
+It needs no token: the pages come from NYPL's public IIIF server, and the app
+loads them from there too. To look for candidates again, `nypl_api.py` uses
+the API. Sign up free at https://api.repo.nypl.org/sign_up, then put the
+emailed token in `pipeline/.nypl_token` (gitignored) or the `NYPL_API_TOKEN`
+environment variable. `python3 nypl_api.py --check` tests it without printing it.
 
 Being polite to NYPL: images are requested at 1000px wide, never full size;
 `--validate-images` sends HEAD requests only, two a second, and caches the
