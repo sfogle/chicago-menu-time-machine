@@ -15,6 +15,8 @@ pipeline/
   import_cia_chicago.py         add menus from the Culinary Institute of America collection
   clean_menus.py                dish-name cleanup and category rules
   venues.py                     hand-entered facts about known venues
+  venue_history.py              sourced building histories and corrections for those venues
+  apply_venue_history.py        push venue edits into menus.json without re-importing
   ocr_menu.py                   OCR one scan and add it to menus.json
   fetch_and_ocr_chicago.py      older bulk fetch + OCR route (Commons / Internet Archive)
   generate_placeholder_scans.py, build_cpi.py
@@ -76,10 +78,17 @@ Things to know about this data:
 - **Highlight boxes on NYPL menus are estimates.** The dataset records one
   point per dish (where a volunteer clicked, usually on the first words), not
   a box. The app marks that point and draws a one-line box around it.
-- **Venue details are hand-entered.** Years of operation, map pins and the
-  "still standing?" notes in `venues.py` are from general knowledge and should
-  be checked. Chicago renumbered its streets in 1909, so pins for older
-  numbered addresses are approximate.
+- **Venue details are hand-entered, and partly sourced.** 56 of the 77 venues
+  have a "Building history" on their card: a few sentences on the building
+  and what replaced it, with links to the pages the facts came from
+  (`venue_history.py`, checked November 2026). Checking them corrected several
+  of the earlier notes. The Sherman House came down in 1980, not 1973. The
+  Stock Yard Inn came down in 1977. Gunther's candy building at 214 S State
+  still stands. The 1907 "Interstate Hotel Co." menu's address is the
+  Lexington Hotel's. Where sources disagree, the history says so or follows
+  most of them. The remaining venues' years, pins and notes are from general
+  knowledge and should be checked. Chicago renumbered its streets in 1909, so
+  pins for older numbered addresses are approximate.
 - **CIA menus are placed by matching, and their rights are unreviewed.** The
   CIA transcripts give text but no positions, so the importer OCRs each page
   only to find where each transcribed dish sits; about one dish in ten has no
@@ -88,7 +97,7 @@ Things to know about this data:
   variants of the dish above, headings run into the first dish, garnishes run
   into the name), but busy menus still produce the odd stray line.
   Where a venue has several menus from one year, only the fullest is kept.
-  Thirteen lesser-known venues have no address on record and share a pin at
+  Twelve lesser-known venues have no address on record and share a pin at
   the centre of the Loop. The CIA marks these records "Copyright Not Evaluated", and the
   1980s menus are probably still in copyright, so the app links to the CIA's
   hosted image and never copies it. The 1934 Blue Ribbon Spa date is the
@@ -142,6 +151,23 @@ name and leaves everything else alone.
 Being polite to the CIA: one request a second, every answer cached in the
 gitignored `pipeline/cia_data/`, and images requested at most 1600px on the
 long side (double-page spreads are unreadable below that).
+
+## Add or correct a venue's history
+
+Venue facts live in `pipeline/venues.py`, and sourced histories in
+`pipeline/venue_history.py`. Each history is a few sentences plus a list of
+`(label, url)` sources, and can override the venue's label, status, "today"
+note or pin. The importers copy these into each menu as they build it. To
+push an edit into the menus already in `menus.json`, run:
+
+```bash
+cd pipeline
+python3 apply_venue_history.py --dry-run   # list the menus that would change
+python3 apply_venue_history.py
+```
+
+It never touches menu names or dishes. It fills in cuisine, emoji and blurb
+only where an entry still has the importer's placeholder.
 
 ## Add a menu that nobody has transcribed
 

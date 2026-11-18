@@ -319,6 +319,31 @@ RAILROADS: dict[str, dict] = {
 }
 
 
+# Sourced histories (and corrections) live in venue_history.py; fold them in here
+# so every importer sees one merged entry per venue.
+from venue_history import HISTORY, NEW_VENUES, RAILROAD_HISTORY  # noqa: E402
+
+for _key, _entry in NEW_VENUES.items():
+    KNOWN_VENUES.setdefault(_key, dict(_entry))
+for _table, _extra in ((KNOWN_VENUES, HISTORY), (RAILROADS, RAILROAD_HISTORY)):
+    for _key, _fields in _extra.items():
+        _table[_key].update(_fields)
+
+
+def standing(known: dict) -> dict:
+    """The stillStanding block for a menu entry, from a KNOWN_VENUES or RAILROADS entry."""
+    block = {
+        "status": known.get("status", "unknown"),
+        "label": known.get("label", "Not yet researched"),
+        "today": known.get("today", "Nobody has checked what stands at this address today."),
+    }
+    if known.get("history"):
+        block["history"] = known["history"]
+    if known.get("sources"):
+        block["sources"] = [{"label": label, "url": url} for label, url in known["sources"]]
+    return block
+
+
 def venue_key(name: str) -> str | None:
     """Key of the KNOWN_VENUES entry matching a venue name, if any."""
     name = name.lower().replace("lasalle", "la salle")

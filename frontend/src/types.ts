@@ -51,6 +51,9 @@ export interface Restaurant {
     status: 'open' | 'gone' | 'moved' | 'unknown'
     label: string
     today: string
+    /** A few sentences on the building, from the linked sources. */
+    history?: string
+    sources?: { label: string; url: string }[]
   }
   /** First (or only) page, plus credit details for the whole menu. */
   scan: ScanPage & {

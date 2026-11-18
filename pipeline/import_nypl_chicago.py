@@ -42,7 +42,7 @@ import urllib.request
 from pathlib import Path
 
 from clean_menus import clean_name, categorize, looks_like_dish, sort_menu
-from venues import KNOWN_VENUES, RAILROADS, railroad_key, venue_key
+from venues import KNOWN_VENUES, RAILROADS, railroad_key, standing, venue_key
 
 HERE = Path(__file__).resolve().parent
 DATA_DIR = HERE / "nypl_data"
@@ -307,11 +307,7 @@ def build_entry(menu: dict, pages: list[dict], items: list[dict], dish_names: di
         "cuisine": cuisine,
         "emoji": emoji,
         "blurb": blurb,
-        "stillStanding": {
-            "status": known.get("status", "unknown"),
-            "label": known.get("label", "Not yet researched"),
-            "today": known.get("today", "Nobody has checked what stands at this address today."),
-        },
+        "stillStanding": standing(known),
         "scan": {
             **first,
             "placeholder": False,

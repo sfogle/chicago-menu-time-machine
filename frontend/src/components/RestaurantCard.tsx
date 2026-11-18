@@ -98,10 +98,37 @@ export default function RestaurantCard({ restaurant: r, year, miles, active, oth
       )}
       <div className={`flex items-start gap-2 border-t-2 border-dashed px-3 py-2 text-sm sm:px-4 ${standing.cls}`}>
         <span aria-hidden="true">{standing.icon}</span>
-        <p>
-          <span className="font-bold uppercase tracking-wide">Still standing? {r.stillStanding.label}.</span>{' '}
-          <span className="text-ink/80">Today: {r.stillStanding.today}</span>
-        </p>
+        <div className="min-w-0 flex-1">
+          <p>
+            <span className="font-bold uppercase tracking-wide">Still standing? {r.stillStanding.label}.</span>{' '}
+            <span className="text-ink/80">Today: {r.stillStanding.today}</span>
+          </p>
+          {r.stillStanding.history && (
+            <details className="group mt-1 text-ink">
+              <summary className="cursor-pointer list-none text-xs font-bold uppercase tracking-wide underline decoration-dotted underline-offset-2 hover:decoration-solid">
+                <span className="group-open:hidden">Building history ▸</span>
+                <span className="hidden group-open:inline">Building history ▾</span>
+              </summary>
+              <p className="mt-1 text-ink/85">{r.stillStanding.history}</p>
+              {r.stillStanding.sources && r.stillStanding.sources.length > 0 && (
+                <ul className="mt-1.5 space-y-0.5 text-xs">
+                  {r.stillStanding.sources.map((s) => (
+                    <li key={s.url}>
+                      <a
+                        href={s.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="break-words font-bold underline underline-offset-2 hover:text-brick"
+                      >
+                        {s.label} ↗
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </details>
+          )}
+        </div>
       </div>
     </article>
   )

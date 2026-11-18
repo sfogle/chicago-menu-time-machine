@@ -73,7 +73,7 @@ SKIP_EVENT = re.compile(
 SKIP_SPONSOR = re.compile(r"CLUB|SOCIETY|ASSOCIATION|COMMITTEE|CITIZENS|BOARD OF|\?")
 
 
-from venues import KNOWN_VENUES  # noqa: E402
+from venues import KNOWN_VENUES, standing  # noqa: E402
 
 
 @dataclasses.dataclass
@@ -371,7 +371,7 @@ def build_entry(cand: Candidate, image: Path, dishes: list[dict], engine: str, u
     entry["emoji"] = known.get("emoji", entry["emoji"])
     entry["yearsKnown"] = "opened" in known
     if "status" in known:
-        entry["stillStanding"] = {"status": known["status"], "label": known["label"], "today": known["today"]}
+        entry["stillStanding"] = standing(known)
     entry["scan"]["sourceUrl"] = cand.source_url
     entry["scan"]["license"] = cand.license
     entry["location"] = {"method": how}

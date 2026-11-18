@@ -40,7 +40,7 @@ from pathlib import Path
 
 from clean_menus import categorize, clean_name, looks_like_dish, sort_menu, title_case
 from import_nypl_chicago import USER_AGENT, locate, price_ceiling
-from venues import KNOWN_VENUES, venue_key
+from venues import KNOWN_VENUES, standing, venue_key
 
 HERE = Path(__file__).resolve().parent
 DATA_DIR = HERE / "cia_data"
@@ -416,11 +416,7 @@ def build_entry(record: dict, max_dishes: int, do_locate: bool, geo_cache: dict,
         "cuisine": known.get("cuisine", "Restaurant"),
         "emoji": known.get("emoji", "🍽️"),
         "blurb": known.get("blurb", re.split(r"(?<=\.)\s", meta.get("descri", ""))[0]),
-        "stillStanding": {
-            "status": known.get("status", "unknown"),
-            "label": known.get("label", "Not yet researched"),
-            "today": known.get("today", "Nobody has checked what stands at this address today."),
-        },
+        "stillStanding": standing(known),
         "scan": {
             **first,
             "placeholder": False,
