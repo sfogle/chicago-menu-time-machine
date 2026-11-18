@@ -18,7 +18,7 @@ pipeline/
   venue_history.py              sourced building histories and corrections for those venues
   apply_venue_history.py        push venue edits into menus.json without re-importing
   ocr_menu.py                   OCR one scan and add it to menus.json
-  fetch_and_ocr_chicago.py      older bulk fetch + OCR route (Commons / Internet Archive)
+  fetch_and_ocr_chicago.py      Internet Archive (and Commons) fetch + OCR; --add-missing-ia adds new menus only
   generate_placeholder_scans.py, build_cpi.py
 .github/workflows/
   deploy.yml                    build + deploy to GitHub Pages on push to main
@@ -49,13 +49,13 @@ transcribed by volunteers, so there is no OCR involved. **62 menus** come from
 the [Culinary Institute of America menu collection](https://cdm16940.contentdm.oclc.org/digital/collection/p16940coll1),
 transcribed by its library; they run from 1909 to 1983 and cover the two
 decades NYPL has nothing for (1930s, 1980s).
-**5 more** are Internet Archive hotel menus (1907-1912) read by OCR.
+**7 more** are Internet Archive hotel menus (1907-1914) read by OCR.
 
 | Decade | Menus | From |
 | --- | --- | --- |
 | 1890s | 4 | NYPL 4 |
-| 1900s | 18 | CIA 1, Internet Archive 1, NYPL 16 |
-| 1910s | 6 | CIA 1, Internet Archive 4, NYPL 1 |
+| 1900s | 19 | CIA 1, Internet Archive 2, NYPL 16 |
+| 1910s | 7 | CIA 1, Internet Archive 5, NYPL 1 |
 | 1920s | 2 | NYPL 2 |
 | 1930s | 4 | CIA 4 |
 | 1940s | 20 | CIA 15, NYPL 5 |
@@ -168,6 +168,26 @@ python3 apply_venue_history.py
 
 It never touches menu names or dishes. It fills in cuisine, emoji and blurb
 only where an entry still has the importer's placeholder.
+
+## Add new Internet Archive menus
+
+```bash
+cd pipeline
+.venv/bin/python fetch_and_ocr_chicago.py --add-missing-ia --engine paddle --dry-run
+.venv/bin/python fetch_and_ocr_chicago.py --add-missing-ia --engine paddle --no-geocode
+python3 clean_menus.py --only ocr
+python3 apply_venue_history.py
+```
+
+This lists every dated, licensed Chicago menu on the Internet Archive with a
+named venue. It skips venue-years `menus.json` already has, OCRs every page,
+and appends the page with the most priced dishes. Existing entries are left
+alone, and the app loads the page image from archive.org. Most of the
+Lexington Hotel's holiday menus (1900, 1904, 1909) are fixed-price dinners
+with no prices, so they are skipped. The November 2026 run added the
+Lexington Hotel 1908 and the Congress Hotel 1914. OCR sometimes runs two
+dishes on one line into a single name ("Easter Eggs en Nest 40 Frozen Egg
+Nog").
 
 ## Add a menu that nobody has transcribed
 

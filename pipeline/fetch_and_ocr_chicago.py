@@ -240,6 +240,91 @@ def ia_candidates(max_items: int) -> list[Candidate]:
     return kept
 
 
+def ia_dated_candidates() -> list[Candidate]:
+    """Every dated, licensed Internet Archive Chicago menu with a named venue, with its page URLs.
+
+    Unlike ia_candidates() this keeps several menus per venue (one per year is
+    chosen later) and drops only items whose year is a decade guess
+    ("1910s-...") or whose venue is unknown.
+    """
+    data = get_json(
+        IA_SEARCH,
+        q='title:(menu) AND title:(chicago) AND subject:(menu OR menus) AND mediatype:(texts) AND year:[1890 TO 1985]',
+        **{"fl[]": ["identifier", "title", "year", "licenseurl", "creator"]},
+        rows=200, output="json",
+    )
+    out: list[Candidate] = []
+    for doc in data["response"]["docs"]:
+        ident, title = doc["identifier"], doc.get("title", "")
+        creator = doc.get("creator", "")
+        venue = (creator[0] if isinstance(creator, list) else creator).strip()
+        if not doc.get("licenseurl") or not doc.get("year") or not venue or venue.lower() == "unknown":
+            continue
+        if re.match(r"^\d{3}0s-", ident) or re.search(r"postcard|air lines|program and menu", title, re.IGNORECASE):
+            continue
+        meta = json.loads(http_get(IA_METADATA + ident))
+        jp2 = next((f for f in meta.get("files", []) if f.get("format") == "Single Page Processed JP2 ZIP"), None)
+        if not jp2:
+            continue
+        n_pages = int(jp2.get("filecount", 0) or 0) or 4
+        out.append(Candidate(
+            key=f"ia-{ident}",
+            venue=venue,
+            year=int(doc["year"]),
+            address="",
+            credit=f"Internet Archive item '{ident}'",
+            license=license_name_from_url(doc["licenseurl"]),
+            source_url=f"https://archive.org/details/{ident}",
+            page_urls=[f"https://archive.org/download/{ident}/page/n{i}_w{DOWNLOAD_WIDTH}.jpg" for i in range(min(n_pages, 6))],
+        ))
+    return out
+
+
+def add_missing_ia(args: argparse.Namespace) -> int:
+    """Add IA menus for venue-years menus.json does not have yet; leave every other entry alone."""
+    doc = json.loads(args.menus.read_text())
+    have = {(r.get("venue"), r["year"]) for r in doc["restaurants"]}
+    used = {r["scan"].get("sourceUrl") for r in doc["restaurants"]}
+    groups: dict[tuple[str, int], list[Candidate]] = {}
+    for cand in ia_dated_candidates():
+        slot = (venue_key(cand.venue), cand.year)
+        if slot not in have and cand.source_url not in used and args.min_year <= cand.year <= args.max_year:
+            groups.setdefault(slot, []).append(cand)
+    print(f"  {len(groups)} venue-years not in menus.json yet", file=sys.stderr)
+
+    chosen = []
+    for (vk, year), cands in sorted(groups.items(), key=lambda g: (g[0][1], g[0][0])):
+        best: tuple[int, Candidate, Path, list[dict], str] | None = None
+        for cand in cands:
+            print(f"  {cand.venue} ({year}) {cand.key}", file=sys.stderr)
+            for raw in download_pages(cand, args.pages_per_menu):
+                web = web_copy(raw)
+                fragments, engine = ocr_cached(web, args.engine)
+                dishes = plausible(ocr_menu.parse_menu(ocr_menu.cluster_rows(fragments), year), year, cand.venue)
+                print(f"    {raw.name}: {len(dishes)} priced dishes ({engine})", file=sys.stderr)
+                if len(dishes) >= args.min_dishes and (best is None or len(dishes) > best[0]):
+                    best = (len(dishes), cand, web, dishes, engine)
+        if best:
+            chosen.append((vk, best))
+        else:
+            print(f"    no page with {args.min_dishes}+ priced dishes; skipped", file=sys.stderr)
+
+    print(f"\nAdding {len(chosen)} menus:", file=sys.stderr)
+    for vk, (count, cand, web, dishes, engine) in chosen:
+        entry = build_entry(cand, web, dishes, engine, use_network=not args.no_geocode)
+        entry["venue"], entry["source"] = vk, "internet-archive"
+        # like the other IA entries, the app loads the page from archive.org rather than a copy in the repo;
+        # dish boxes stay in the 1400px web copy's coordinates, which the app scales
+        page = int(re.search(r"-p(\d+)\.jpg$", web.name)[1]) - 1
+        entry["scan"]["src"] = f"https://archive.org/download/{cand.key[3:]}/page/n{page}_w1000.jpg"
+        print(f"  {entry['year']}  {entry['name']:<34} {count:>3} dishes  [{web.name}]", file=sys.stderr)
+        if not args.dry_run:
+            ocr_menu.save_entry(entry, web, args.menus, args.scans_dir, replace=False)
+    if args.dry_run:
+        print("\n--dry-run: nothing written to frontend/", file=sys.stderr)
+    return 0
+
+
 def license_name_from_url(url: str) -> str:
     m = re.search(r"creativecommons\.org/(licenses|publicdomain)/([a-z-]+)/([\d.]+)", url)
     if not m:
@@ -402,10 +487,14 @@ def main() -> int:
     p.add_argument("--dry-run", action="store_true", help="download and OCR, but do not touch frontend/")
     p.add_argument("--menus", type=Path, default=ocr_menu.DEFAULT_MENUS)
     p.add_argument("--scans-dir", type=Path, default=ocr_menu.DEFAULT_SCANS)
+    p.add_argument("--add-missing-ia", action="store_true",
+                   help="only add Internet Archive menus for venue-years not already in menus.json")
     args = p.parse_args()
 
     for d in (RAW_DIR, WEB_DIR, CACHE_DIR):
         d.mkdir(parents=True, exist_ok=True)
+    if args.add_missing_ia:
+        return add_missing_ia(args)
 
     print("Listing candidates…", file=sys.stderr)
     commons = commons_candidates()
