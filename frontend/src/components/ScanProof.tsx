@@ -134,8 +134,10 @@ export default function ScanProof({ restaurant, dish, active, multiplier, baseYe
           <p className="mb-2 text-xs uppercase tracking-wider text-white/60">
             Cropped from the {restaurant.year} menu{region?.exact ? '' : ' · position approximate'}
           </p>
+          {/* ring, not border: aspect-ratio sizes the border box but the image's % offsets use the
+              padding box, so a border shifts thin crops by several lines */}
           <div
-            className="relative w-full overflow-hidden rounded-md border-2 border-mustard bg-white/10"
+            className="relative w-full overflow-hidden rounded-md bg-white/10 ring-2 ring-mustard"
             style={{ aspectRatio: `${crop.w * page.width} / ${crop.h * page.height}` }}
           >
             {current.state === 'ok' && (
